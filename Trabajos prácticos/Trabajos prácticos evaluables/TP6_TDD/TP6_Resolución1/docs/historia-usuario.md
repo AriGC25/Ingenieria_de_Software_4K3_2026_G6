@@ -37,7 +37,7 @@
 - [X] La historia cumple **INVEST** (independiente, negociable, valiosa, estimable, pequeña, testeable).
 - [X] Tiene frase verbal, descripción "como / quiero / para", criterios y pruebas de aceptación escritas.
 - [X] El equipo la estimó (5 SP) y entra en la capacidad del sprint.
-- [ ] La historia no posee bloqueantes o todos los bloqueantes han sido resueltos.
+- [X] La historia no posee bloqueantes o todos los bloqueantes han sido resueltos.
 
 ### Definición de DONE
 
@@ -65,34 +65,8 @@
 
 ## 3. Conversación
 
-Dudas y consultas a resolver con el Product Owner. Mientras no haya respuesta, el equipo trabaja con el supuesto indicado, configurable para poder cambiarlo sin rehacer código.
-
-**Bloqueantes:**
-
-| ID | Pregunta al PO | Supuesto del equipo | Respuesta del PO |
-|----|----------------|---------------------|------------------|
-| C-01 | ¿Qué días y en qué horario abre el parque? | Todos los días de 09:00 a 18:00. | _Pendiente_ |
-| C-02 | ¿Con cuánta anticipación se puede inscribir? ¿Hasta qué momento antes del inicio? | Hasta 7 días hacia adelante y hasta el inicio de la actividad. | _Pendiente_ |
-| C-03 | ¿Cuál es el cupo de cada actividad por horario? | Configurable por horario; seed con 10 (Tirolesa), 20 (Safari), 8 (Palestra), 15 (Jardinería). | _Pendiente_ |
-| C-04 | ¿Se permite una inscripción parcial si no alcanzan los cupos para todo el grupo? | No: la inscripción se rechaza completa. | _Pendiente_ |
-| C-05 | ¿Qué actividades requieren talla de vestimenta y qué valores son válidos? | Tirolesa y Palestra; tallas XS, S, M, L, XL, XXL. | _Pendiente_ |
-| C-06 | ¿A qué email se envía la confirmación? La historia no pide email en los datos del visitante. | Se utiliza el email del usuario logueado que realiza la inscripción. | _Pendiente_ |
-| C-07 | ¿Hay edad mínima o máxima por actividad? ¿Los menores necesitan un adulto acompañante? | Sin restricción por ahora; edad válida entre 0 y 120. | _Pendiente_ |
-
-**No bloqueantes:**
-
-| ID | Pregunta al PO | Supuesto del equipo | Respuesta del PO |
-|----|----------------|---------------------|------------------|
-| C-08 | ¿Hay un máximo de personas por inscripción? | Máximo 10 personas. | _Pendiente_ |
-| C-09 | ¿Una misma persona (DNI) puede inscribirse dos veces en el mismo horario o en horarios superpuestos? | No en el mismo horario. | _Pendiente_ |
-| C-10 | ¿Hay que estar registrado o haber comprado entrada para inscribirse? | Si, es necesario estar logueado | _Pendiente_ |
-| C-11 | ¿Qué información debe contener el QR y cómo se valida en el parque? | La validación queda fuera de alcance; el mail usa un template HTML con un QR fijo (misma imagen para todas las inscripciones) y muestra el código de inscripción en texto. | _Pendiente_ |
-| C-12 | ¿Se puede cancelar o modificar una inscripción? | Fuera de alcance de esta historia. | _Pendiente_ |
-| C-13 | ¿Los términos y condiciones son distintos por actividad? ¿Quién provee los textos? | Sí, uno por actividad, provistos por los administradores. | _Pendiente_ |
-| C-14 | ¿Qué formato de DNI se acepta (extranjeros, pasaporte)? | DNI argentino: 7 u 8 dígitos numéricos. | _Pendiente_ |
-
-### Registro de conversaciones
-
-| Fecha | Participantes | Temas | Acuerdos |
-|-------|---------------|-------|----------|
-| _dd/mm/aaaa_ | _Equipo + PO_ | _C-xx_ | _..._ |
+> **[15/10/2026] Resolución de Bloqueantes**
+>
+> Se resolvieron los bloqueantes C-01 a C-07 (días y horarios de apertura, anticipación de la inscripción, cupos por actividad, inscripción grupal, talles, usuario y edades mínimas) con las respuestas de los PO detalladas en [validaciones-po.md](validaciones-po.md).
+>
+> La historia cumple el criterio de READY y es posible continuar con el desarrollo.
