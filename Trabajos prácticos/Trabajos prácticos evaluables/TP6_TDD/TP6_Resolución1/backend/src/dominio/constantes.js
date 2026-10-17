@@ -34,4 +34,7 @@ export const INTENTOS_CODIGO = 3;
 
 export const PREFIJO_CODIGO = 'ECOPARK-';
 export const LARGO_CODIGO = 6;
-export const ALFABETO_CODIGO = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const CARACTERES_AMBIGUOS = '0O1I';
+export const ALFABETO_CODIGO = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789']
+  .filter((caracter) => !CARACTERES_AMBIGUOS.includes(caracter))
+  .join('');
