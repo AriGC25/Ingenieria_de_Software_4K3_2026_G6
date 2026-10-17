@@ -36,18 +36,17 @@ function leerBaseDatos(valor) {
 }
 
 function leerUrl(texto) {
-  try {
-    return new URL(texto).href.replace(/\/$/, '');
-  } catch {
-    throw new ErrorConfiguracion('APP_URL', `debe ser una URL completa (recibido "${texto}")`);
-  }
+  exigir('APP_URL', texto, (t) => URL.canParse(t), 'ser una URL completa');
+  return new URL(texto).href.replace(/\/$/, '');
 }
 
 function leerMail(valor) {
-  const perfil = valor('MAIL_PERFIL') ?? 'desarrollo';
-  if (!PERFILES_MAIL.includes(perfil)) {
-    throw new ErrorConfiguracion('MAIL_PERFIL', `debe ser ${PERFILES_MAIL.join(', ')}`);
-  }
+  const perfil = exigir(
+    'MAIL_PERFIL',
+    valor('MAIL_PERFIL') ?? 'desarrollo',
+    (p) => PERFILES_MAIL.includes(p),
+    `ser ${PERFILES_MAIL.join(', ')}`,
+  );
   const remitente = valor('MAIL_FROM') ?? 'EcoHarmony Park <no-responder@ecoharmony.example>';
   return { perfil, remitente, smtp: leerSmtp(perfil, valor) };
 }
@@ -88,10 +87,19 @@ function leerCalendario(valor) {
   };
 }
 
-function leerHora(nombre, texto) {
-  if (!HORA.test(texto))
-    throw new ErrorConfiguracion(nombre, `debe tener el formato HH:mm (recibido "${texto}")`);
+/**
+ * Valida un valor del entorno con una condición; si no la cumple, la aplicación no arranca.
+ * @returns {string} el mismo texto
+ */
+function exigir(nombre, texto, esValido, descripcion) {
+  if (!esValido(texto)) {
+    throw new ErrorConfiguracion(nombre, `debe ${descripcion} (recibido "${texto}")`);
+  }
   return texto;
+}
+
+function leerHora(nombre, texto) {
+  return exigir(nombre, texto, (t) => HORA.test(t), 'tener el formato HH:mm');
 }
 
 function lista(texto) {
@@ -103,41 +111,26 @@ function lista(texto) {
 
 function leerDiasCerrados(texto) {
   if (texto === undefined) return [...CALENDARIO_POR_DEFECTO.diasCerrados];
-  return lista(texto).map((dia) => {
-    if (!/^[0-6]$/.test(dia)) {
-      throw new ErrorConfiguracion(
-        'PARQUE_DIAS_CERRADOS',
-        `debe listar días de 0 a 6 (recibido "${dia}")`,
-      );
-    }
-    return Number(dia);
-  });
+  const esDia = (dia) => /^[0-6]$/.test(dia);
+  return lista(texto).map((dia) =>
+    Number(exigir('PARQUE_DIAS_CERRADOS', dia, esDia, 'listar días de 0 a 6')),
+  );
 }
 
 function leerFeriados(texto) {
   if (texto === undefined) return [...CALENDARIO_POR_DEFECTO.feriadosCerrados];
-  return lista(texto).map((feriado) => {
-    if (!MES_DIA.test(feriado)) {
-      throw new ErrorConfiguracion(
-        'PARQUE_FERIADOS_CERRADOS',
-        `debe listar fechas MM-DD (recibido "${feriado}")`,
-      );
-    }
-    return feriado;
-  });
+  const esMesDia = (feriado) => MES_DIA.test(feriado);
+  return lista(texto).map((f) =>
+    exigir('PARQUE_FERIADOS_CERRADOS', f, esMesDia, 'listar fechas MM-DD'),
+  );
 }
 
 function leerEntero(nombre, texto) {
-  if (!/^\d+$/.test(texto))
-    throw new ErrorConfiguracion(nombre, `debe ser un entero positivo (recibido "${texto}")`);
-  return Number(texto);
+  return Number(exigir(nombre, texto, (t) => /^\d+$/.test(t), 'ser un entero positivo'));
 }
 
 function leerRelojFijo(texto) {
   if (texto === undefined) return null;
-  const instante = new Date(texto);
-  if (Number.isNaN(instante.getTime())) {
-    throw new ErrorConfiguracion('RELOJ_FIJO', `debe ser una fecha ISO 8601 (recibido "${texto}")`);
-  }
-  return instante;
+  const esFecha = (t) => !Number.isNaN(new Date(t).getTime());
+  return new Date(exigir('RELOJ_FIJO', texto, esFecha, 'ser una fecha ISO 8601'));
 }
