@@ -19,6 +19,14 @@ export function PaginaParticipantes() {
   const cantidad = watch('cantidad');
   const visibles = Number.isInteger(cantidad) ? Math.min(Math.max(cantidad, 0), cupos) : 0;
 
+  // Se muestran todos los errores a la vez y el foco va al primero, en el orden del formulario.
+  function mostrarErrores(errores) {
+    errores.forEach(({ campo, mensaje }) =>
+      setError(campo, { type: 'validacion', message: mensaje }),
+    );
+    setFocus(errores[0].campo);
+  }
+
   function continuar() {
     clearErrors();
     const errores = validarParticipantes(getValues(), {
@@ -31,10 +39,7 @@ export function PaginaParticipantes() {
       navegar('/inscripcion/confirmacion');
       return;
     }
-    errores.forEach(({ campo, mensaje }) =>
-      setError(campo, { type: 'validacion', message: mensaje }),
-    );
-    setFocus(errores[0].campo);
+    mostrarErrores(errores);
   }
 
   return (

@@ -28,16 +28,18 @@ export function validarParticipantes({ cantidad, participantes }, contexto) {
 }
 
 function erroresDePersona({ nombre = '', dni = '', edad = '', talle = '' }, contexto, dnisPrevios) {
-  const recortado = nombre.trim();
   return [
-    [
-      'nombre',
-      !recortado || recortado.length > 100 || !NOMBRE.test(recortado) ? MENSAJES.nombre : null,
-    ],
+    ['nombre', errorDeNombre(nombre)],
     ['dni', errorDeDni(dni, dnisPrevios)],
     ['edad', errorDeEdad(String(edad), contexto.edadMinima)],
     ['talle', contexto.requiereTalle ? errorDeTalle(talle) : null],
   ].filter(([, mensaje]) => mensaje);
+}
+
+function errorDeNombre(nombre) {
+  const recortado = nombre.trim();
+  const valido = recortado.length >= 1 && recortado.length <= 100 && NOMBRE.test(recortado);
+  return valido ? null : MENSAJES.nombre;
 }
 
 function errorDeDni(dni, dnisPrevios) {
