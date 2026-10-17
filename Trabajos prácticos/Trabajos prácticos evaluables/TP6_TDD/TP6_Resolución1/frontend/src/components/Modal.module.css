@@ -1,0 +1,32 @@
+.fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  padding: var(--esp-4);
+  background-color: rgb(31 42 31 / 0.6);
+}
+
+.dialogo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+  width: 100%;
+  max-width: var(--ancho-contenido);
+  max-height: calc(100vh - 2 * var(--esp-4));
+  padding: var(--esp-6);
+  border-radius: var(--radio-medio);
+  background-color: var(--color-superficie);
+  box-shadow: var(--sombra-2);
+}
+
+.cuerpo {
+  overflow-y: auto;
+  white-space: pre-line;
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+}
