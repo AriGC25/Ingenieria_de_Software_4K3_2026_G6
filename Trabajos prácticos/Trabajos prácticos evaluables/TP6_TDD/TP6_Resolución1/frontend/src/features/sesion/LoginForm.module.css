@@ -1,0 +1,14 @@
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+  padding: var(--esp-6) var(--esp-4);
+  border-radius: var(--radio-medio);
+  background-color: var(--color-superficie);
+  box-shadow: var(--sombra-1);
+}
+
+.nota {
+  font: var(--texto-chico);
+  color: var(--color-texto-secundario);
+}
