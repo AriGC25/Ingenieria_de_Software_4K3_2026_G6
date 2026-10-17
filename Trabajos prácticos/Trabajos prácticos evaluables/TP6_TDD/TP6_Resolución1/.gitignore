@@ -10,3 +10,6 @@ dist
 coverage
 *.db
 *.db-journal
+e2e/e2e.db*
+test-results
+playwright-report

@@ -28,7 +28,8 @@
   color: var(--color-texto-secundario);
 }
 
-.seleccionado {
+.seleccionado,
+.seleccionado:hover:not(:disabled) {
   border-color: var(--color-primario);
   background-color: var(--color-primario);
   color: var(--color-superficie);

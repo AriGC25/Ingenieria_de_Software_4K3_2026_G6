@@ -38,9 +38,25 @@
   color: var(--color-texto-secundario);
 }
 
-.seleccionada {
+.seleccionada,
+.seleccionada:hover:not(:disabled) {
   border-color: var(--color-primario);
   background-color: #f7fbef;
+  box-shadow: 0 0 0 2px var(--color-primario);
+}
+
+.marca {
+  position: absolute;
+  top: var(--esp-3);
+  right: var(--esp-3);
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--color-primario);
+  color: var(--color-superficie);
+  font-weight: 700;
 }
 
 .tarjeta:disabled {

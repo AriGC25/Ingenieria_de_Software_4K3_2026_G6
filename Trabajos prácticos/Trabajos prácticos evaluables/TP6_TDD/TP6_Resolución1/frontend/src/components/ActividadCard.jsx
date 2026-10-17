@@ -19,6 +19,11 @@ export function ActividadCard({ actividad, seleccionada = false, onSeleccionar }
       onClick={() => onSeleccionar(actividad)}
     >
       <span className={styles.franja} aria-hidden="true" />
+      {seleccionada && (
+        <span className={styles.marca} aria-hidden="true">
+          ✓
+        </span>
+      )}
       <span className={styles.nombre}>{nombre}</span>
       <span className={styles.detalle}>
         {edadMinima === null ? 'Todas las edades' : `Desde ${edadMinima} años`}
