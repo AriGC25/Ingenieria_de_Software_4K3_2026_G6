@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { SolicitudInvalida } from '../../dominio/errores.js';
-import { esquemaConsultaTurnos } from './esquemas.js';
+import { esquemaConsultaTurnos, esquemaSolicitudInscripcion } from './esquemas.js';
 
 /**
  * Rutas de la API. Cada controlador valida la forma, invoca su caso de uso y responde.
@@ -30,6 +30,14 @@ export function crearRutas(casosDeUso) {
     manejar(async (req, res) => {
       const { fecha } = validar(esquemaConsultaTurnos, req.query, 'fecha');
       res.json(await casosDeUso.consultarTurnos.ejecutar({ actividadId: req.params.id, fecha }));
+    }),
+  );
+
+  rutas.post(
+    '/inscripciones',
+    manejar(async (req, res) => {
+      const solicitud = validar(esquemaSolicitudInscripcion, req.body);
+      res.status(201).json(await casosDeUso.inscribirseActividad.ejecutar(solicitud));
     }),
   );
 
