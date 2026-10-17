@@ -7,6 +7,8 @@ const aActividad = (fila) => new Actividad(fila);
 
 const aTurno = ({ actividad, ...fila }) => new Turno({ ...fila, actividad: aActividad(actividad) });
 
+const CON_ACTIVIDAD = Object.freeze({ include: { actividad: true } });
+
 /** Implementa `RepositorioActividades` con Prisma. */
 export class RepositorioActividadesPrisma {
   /** @param {import('../../../generated/client.js').PrismaClient} prisma */
@@ -35,10 +37,7 @@ export class RepositorioTurnosPrisma {
 
   /** @param {string} id */
   async obtenerPorId(id) {
-    const fila = await this.prisma.turno.findUnique({
-      where: { id },
-      include: { actividad: true },
-    });
+    const fila = await this.prisma.turno.findUnique({ where: { id }, ...CON_ACTIVIDAD });
     return fila ? aTurno(fila) : null;
   }
 
@@ -50,7 +49,7 @@ export class RepositorioTurnosPrisma {
     const desde = instanteArgentino(fecha);
     const filas = await this.prisma.turno.findMany({
       where: { actividadId, inicio: { gte: desde, lt: addDays(desde, 1) } },
-      include: { actividad: true },
+      ...CON_ACTIVIDAD,
       orderBy: { inicio: 'asc' },
     });
     return filas.map(aTurno);
@@ -66,7 +65,7 @@ export class RepositorioTurnosPrisma {
         inicio: { gte: desde, lte: hasta },
         cupoOcupado: { lt: this.prisma.turno.fields.cupoMaximo },
       },
-      include: { actividad: true },
+      ...CON_ACTIVIDAD,
     });
     return filas.map(aTurno);
   }
