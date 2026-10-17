@@ -16,11 +16,6 @@ const MOTIVOS = {
  */
 export function TurnoChip({ turno, seleccionado = false, onSeleccionar }) {
   const disponible = turno.estado === 'disponible';
-  const detalle = disponible
-    ? cupos(turno.cuposDisponibles)
-    : turno.estado === 'agotado'
-      ? 'Sin cupos'
-      : MOTIVOS[turno.motivo];
   return (
     <button
       type="button"
@@ -30,7 +25,14 @@ export function TurnoChip({ turno, seleccionado = false, onSeleccionar }) {
       onClick={() => onSeleccionar(turno)}
     >
       <span className={styles.hora}>{turno.hora}</span>
-      <span className={styles.detalle}>{detalle}</span>
+      <span className={styles.detalle}>{detalleDe(turno)}</span>
     </button>
   );
+}
+
+/** Los cupos restantes si se puede elegir; si no, por qué no. */
+function detalleDe({ estado, cuposDisponibles, motivo }) {
+  if (estado === 'disponible') return cupos(cuposDisponibles);
+  if (estado === 'agotado') return 'Sin cupos';
+  return MOTIVOS[motivo];
 }
