@@ -61,3 +61,10 @@ export class TalleRequerido extends ErrorDominio {
     super('TALLE_REQUERIDO', 'Ingresá el talle.', campo);
   }
 }
+
+/** El turno no tiene cupo para todo el grupo. */
+export class SinCupo extends ErrorDominio {
+  constructor() {
+    super('SIN_CUPO', 'No quedan cupos suficientes para este horario. Probá con otro.');
+  }
+}

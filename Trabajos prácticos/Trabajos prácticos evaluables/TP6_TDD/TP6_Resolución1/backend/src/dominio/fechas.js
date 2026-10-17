@@ -23,3 +23,19 @@ export function partesDeFecha(fecha) {
   const local = new TZDate(instante, ZONA_HORARIA);
   return { diaSemana: local.getDay(), mesDia: format(local, 'MM-dd') };
 }
+
+/**
+ * @param {Date} instante
+ * @returns {string} la fecha en hora argentina, `YYYY-MM-DD`
+ */
+export function fechaArgentina(instante) {
+  return format(new TZDate(instante, ZONA_HORARIA), 'yyyy-MM-dd');
+}
+
+/**
+ * @param {Date} instante
+ * @returns {string} la hora en hora argentina, `HH:mm`
+ */
+export function horaArgentina(instante) {
+  return format(new TZDate(instante, ZONA_HORARIA), 'HH:mm');
+}
