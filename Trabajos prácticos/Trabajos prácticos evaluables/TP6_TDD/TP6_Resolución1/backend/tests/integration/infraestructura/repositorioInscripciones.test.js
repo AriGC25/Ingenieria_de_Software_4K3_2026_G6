@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { SinCupo } from '../../../src/dominio/errores.js';
 import { CodigoDuplicado } from '../../../src/aplicacion/puertos.js';
-import { RepositorioInscripcionesPrisma } from '../../../src/infraestructura/database/repositorios.js';
+import { RepositorioInscripcionesPrisma } from '../../../src/infraestructura/database/repositorioInscripciones.js';
 import { basePrismaDePrueba } from '../basePrisma.js';
 
 const TURNO = 't-tirolesa-2026-10-20-10';

@@ -1,10 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { Actividad } from '../../../src/dominio/actividad.js';
 import { Turno } from '../../../src/dominio/turno.js';
-import {
-  RepositorioActividadesPrisma,
-  RepositorioTurnosPrisma,
-} from '../../../src/infraestructura/database/repositorios.js';
+import { RepositorioActividadesPrisma } from '../../../src/infraestructura/database/repositorioActividades.js';
+import { RepositorioTurnosPrisma } from '../../../src/infraestructura/database/repositorioTurnos.js';
 import { basePrismaDePrueba } from '../basePrisma.js';
 
 describe('repositorios de actividades y turnos (Prisma)', () => {
