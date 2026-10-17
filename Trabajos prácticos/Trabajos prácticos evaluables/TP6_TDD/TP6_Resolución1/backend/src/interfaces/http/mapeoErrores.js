@@ -28,5 +28,5 @@ export function mapearError(error) {
       cuerpo: campo ? { codigo, mensaje, campo } : { codigo, mensaje },
     };
   }
-  return { estado: 500, cuerpo: { codigo: 'ERROR_INTERNO', mensaje: MENSAJES.SOLICITUD_INVALIDA } };
+  return { estado: 500, cuerpo: { codigo: 'ERROR_INTERNO', mensaje: MENSAJES.ERROR_GENERICO } };
 }
