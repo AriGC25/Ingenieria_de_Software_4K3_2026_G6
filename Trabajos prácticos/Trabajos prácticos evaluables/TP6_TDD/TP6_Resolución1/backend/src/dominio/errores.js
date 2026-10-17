@@ -106,3 +106,10 @@ export class SolicitudInvalida extends ErrorDominio {
     super('SOLICITUD_INVALIDA', MENSAJES.SOLICITUD_INVALIDA, campo);
   }
 }
+
+/** Se consultan turnos de una actividad que no existe. */
+export class ActividadInexistente extends ErrorDominio {
+  constructor() {
+    super('ACTIVIDAD_INEXISTENTE', MENSAJES.SOLICITUD_INVALIDA);
+  }
+}
