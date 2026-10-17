@@ -31,5 +31,13 @@ export function crearCalendarioParque(configuracion = {}) {
      * @returns {boolean}
      */
     estaAbierto: (fecha) => motivoCierre(fecha) === null,
+    /**
+     * @param {string} fecha `YYYY-MM-DD`
+     * @returns {{ fecha: string, abierta: boolean, motivo?: string }}
+     */
+    estadoDe(fecha) {
+      const motivo = motivoCierre(fecha);
+      return motivo ? { fecha, abierta: false, motivo } : { fecha, abierta: true };
+    },
   });
 }

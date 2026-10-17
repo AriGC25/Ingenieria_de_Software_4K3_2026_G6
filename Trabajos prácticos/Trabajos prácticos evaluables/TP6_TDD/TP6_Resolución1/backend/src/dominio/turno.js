@@ -48,6 +48,21 @@ export class Turno {
   }
 
   /**
+   * Lo que el visitante ve del turno en este momento.
+   * @param {Date} ahora
+   * @param {object} calendario
+   * @returns {{ id: string, hora: string, cuposDisponibles: number, estado: string, motivo?: string }}
+   */
+  resumen(ahora, calendario) {
+    return {
+      id: this.id,
+      hora: this.hora,
+      cuposDisponibles: this.cuposDisponibles(),
+      ...this.estado(ahora, calendario),
+    };
+  }
+
+  /**
    * @param {number} cantidad personas a reservar
    * @throws {SinCupo} si no alcanzan los cupos; el turno no cambia
    */
