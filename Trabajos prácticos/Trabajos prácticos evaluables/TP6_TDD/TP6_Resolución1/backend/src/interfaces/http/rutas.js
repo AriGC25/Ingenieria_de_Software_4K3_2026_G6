@@ -45,15 +45,21 @@ function responder(controlador, estado) {
       .catch(next);
 }
 
+/**
+ * Valida la forma con Zod. Si no la cumple, informa el primer campo inválido.
+ * @throws {SolicitudInvalida}
+ */
 function validar(esquema, datos) {
   const resultado = esquema.safeParse(datos);
-  if (!resultado.success) throw new SolicitudInvalida(campoDe(resultado.error.issues[0].path));
-  return resultado.data;
+  if (resultado.success) return resultado.data;
+  throw new SolicitudInvalida(nombreDeCampo(resultado.error.issues[0].path));
 }
 
-/** `['participantes', 0, 'edad']` → `participantes[0].edad` */
-function campoDe(ruta) {
-  return ruta
-    .map((parte, i) => (typeof parte === 'number' ? `[${parte}]` : `${i ? '.' : ''}${parte}`))
-    .join('');
+/** `['participantes', 0, 'edad']` → `participantes[0].edad`, igual que los campos del dominio. */
+function nombreDeCampo(ruta) {
+  return ruta.reduce(
+    (nombre, parte) =>
+      typeof parte === 'number' ? `${nombre}[${parte}]` : nombre ? `${nombre}.${parte}` : parte,
+    '',
+  );
 }
