@@ -40,17 +40,19 @@ export function crearInscripcion(solicitud) {
 }
 
 async function pedir(ruta, opciones) {
-  let respuesta;
+  const respuesta = await enviar(ruta, opciones);
+  const cuerpo = await respuesta.json().catch(() => null);
+  if (respuesta.ok && cuerpo !== null) return cuerpo;
+  throw cuerpo?.codigo
+    ? new ErrorApi(cuerpo, respuesta.status)
+    : new ErrorApi({ codigo: 'RESPUESTA_INESPERADA', mensaje: MENSAJE_GENERICO }, respuesta.status);
+}
+
+/** Hace la solicitud; si no llega al servidor, lo informa como un error de red. */
+async function enviar(ruta, opciones) {
   try {
-    respuesta = await fetch(new URL(ruta, window.location.origin), opciones);
+    return await fetch(new URL(ruta, window.location.origin), opciones);
   } catch {
     throw new ErrorApi({ codigo: 'ERROR_DE_RED', mensaje: MENSAJE_GENERICO });
   }
-  const cuerpo = await respuesta.json().catch(() => null);
-  if (respuesta.ok && cuerpo !== null) return cuerpo;
-  if (cuerpo?.codigo) throw new ErrorApi(cuerpo, respuesta.status);
-  throw new ErrorApi(
-    { codigo: 'RESPUESTA_INESPERADA', mensaje: MENSAJE_GENERICO },
-    respuesta.status,
-  );
 }
