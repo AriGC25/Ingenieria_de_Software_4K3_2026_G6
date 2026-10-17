@@ -68,6 +68,15 @@ describe('paso 4: confirmación', () => {
     expect(boton).toBeEnabled();
   });
 
+  it('INS-UI-08: el botón deshabilitado dice por qué lo está', async () => {
+    await llegarAConfirmacion();
+    const boton = screen.getByRole('button', { name: 'Confirmar inscripción' });
+
+    expect(boton).toHaveAccessibleDescription('Para confirmar, aceptá los términos y condiciones.');
+    await aceptarTerminos();
+    expect(boton).not.toHaveAccessibleDescription();
+  });
+
   it('INS-UI-09: confirmar envía la solicitud correcta y muestra el éxito con el detalle y el código', async () => {
     const solicitudes = capturarSolicitudes(() =>
       HttpResponse.json(
