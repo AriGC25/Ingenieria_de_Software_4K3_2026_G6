@@ -1,0 +1,73 @@
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-2);
+  min-height: var(--area-tactil);
+  padding: var(--esp-2) var(--esp-6);
+  border: 2px solid transparent;
+  border-radius: var(--radio-medio);
+  font: var(--texto-etiqueta);
+  font-size: 16px;
+  cursor: pointer;
+  transition:
+    background-color var(--transicion),
+    border-color var(--transicion);
+}
+
+.primario {
+  background-color: var(--color-primario);
+  color: var(--color-superficie);
+}
+
+.primario:hover:not(:disabled) {
+  background-color: var(--color-primario-hover);
+}
+
+.secundario {
+  background-color: var(--color-superficie);
+  border-color: var(--color-primario);
+  color: var(--color-primario);
+}
+
+.secundario:hover:not(:disabled) {
+  background-color: var(--color-fondo);
+}
+
+.texto {
+  background: none;
+  color: var(--color-primario);
+  padding-inline: var(--esp-2);
+  text-decoration: underline;
+}
+
+.boton:disabled {
+  background-color: var(--color-deshabilitado);
+  border-color: transparent;
+  color: var(--color-texto);
+  cursor: not-allowed;
+}
+
+.texto:disabled {
+  background: none;
+  color: var(--color-texto-secundario);
+}
+
+.anchoCompleto {
+  width: 100%;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
