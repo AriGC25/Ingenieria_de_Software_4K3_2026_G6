@@ -1,5 +1,6 @@
 import { forwardRef } from 'react';
 import styles from './Alert.module.css';
+import { clases } from './clases.js';
 
 const ICONOS = { exito: '✓', error: '!', advertencia: '!', info: 'i' };
 
@@ -15,7 +16,7 @@ export const Alert = forwardRef(function Alert({ tipo = 'info', titulo, children
       ref={ref}
       role={urgente ? 'alert' : 'status'}
       tabIndex={-1}
-      className={`${styles.alerta} ${styles[tipo]}`}
+      className={clases(styles.alerta, styles[tipo])}
     >
       <span className={styles.icono} aria-hidden="true">
         {ICONOS[tipo]}

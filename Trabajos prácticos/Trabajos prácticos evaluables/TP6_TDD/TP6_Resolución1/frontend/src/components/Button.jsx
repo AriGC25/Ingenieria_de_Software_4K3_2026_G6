@@ -1,4 +1,5 @@
 import styles from './Button.module.css';
+import { clases } from './clases.js';
 
 /**
  * Botón del design system. En estado `cargando` queda deshabilitado y dice "Enviando...".
@@ -15,11 +16,15 @@ export function Button({
   className = '',
   ...props
 }) {
-  const clases = [styles.boton, styles[variante], anchoCompleto && styles.anchoCompleto, className];
   return (
     <button
       type={type}
-      className={clases.filter(Boolean).join(' ')}
+      className={clases(
+        styles.boton,
+        styles[variante],
+        anchoCompleto && styles.anchoCompleto,
+        className,
+      )}
       disabled={disabled || cargando}
       aria-busy={cargando || undefined}
       {...props}
