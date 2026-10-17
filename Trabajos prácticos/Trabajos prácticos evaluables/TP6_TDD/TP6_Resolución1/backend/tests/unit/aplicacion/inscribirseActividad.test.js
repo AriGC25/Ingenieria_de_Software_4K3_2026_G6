@@ -64,19 +64,18 @@ describe('InscribirseActividad', () => {
   });
 
   it('APP-05: envía el mail después de registrar la inscripción', async () => {
-    const ctx = contextoDeInscripcion();
-    const orden = [];
-    const notificador = {
-      enviarConfirmacion: async () => {
-        orden.push(`enviar con ${ctx.repositorioInscripciones.inscripciones.size} registrada`);
+    const registradasAlEnviar = [];
+    const ctx = contextoDeInscripcion({
+      notificador: {
+        enviarConfirmacion: async () => {
+          registradasAlEnviar.push(ctx.repositorioInscripciones.inscripciones.size);
+        },
       },
-    };
-    const conOrden = contextoDeInscripcion({ notificador });
-    ctx.repositorioInscripciones = conOrden.repositorioInscripciones;
+    });
 
-    await conOrden.casoDeUso.ejecutar(unaInscripcion().build());
+    await ctx.casoDeUso.ejecutar(unaInscripcion().build());
 
-    expect(orden).toEqual(['enviar con 1 registrada']);
+    expect(registradasAlEnviar).toEqual([1]);
   });
 
   it('APP-07: si una regla de dominio falla, no guarda ni notifica', async () => {

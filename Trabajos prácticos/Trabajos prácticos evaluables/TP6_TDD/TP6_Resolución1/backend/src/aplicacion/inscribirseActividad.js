@@ -20,16 +20,24 @@ export class InscribirseActividad {
    * @returns {Promise<object>} la inscripción confirmada
    * @throws {import('../dominio/errores.js').ErrorDominio}
    */
-  async ejecutar({ turnoId, email, aceptaTerminos, participantes }) {
-    const turno = await this.repositorioTurnos.obtenerPorId(turnoId);
+  async ejecutar(solicitud) {
+    const turno = await this.repositorioTurnos.obtenerPorId(solicitud.turnoId);
     if (!turno) throw new HorarioNoDisponible();
 
-    const dnis = participantes.map((p) => p.dni);
+    const inscripcion = await this.#validar(turno, solicitud);
+    const codigo = await this.#registrar(inscripcion);
+    const detalle = detalleDe(codigo, inscripcion);
+    await this.#notificar(detalle);
+
+    return respuestaDe(detalle);
+  }
+
+  async #validar(turno, { email, aceptaTerminos, participantes }) {
     const dnisYaInscriptos = await this.repositorioInscripciones.dnisInscriptosEnInicio(
       turno.inicio,
-      dnis,
+      participantes.map((p) => p.dni),
     );
-    const inscripcion = crearInscripcion({
+    return crearInscripcion({
       turno,
       email,
       aceptaTerminos,
@@ -38,30 +46,40 @@ export class InscribirseActividad {
       calendario: this.calendario,
       dnisYaInscriptos,
     });
+  }
 
+  async #registrar(inscripcion) {
     const codigo = this.generadorCodigo.generar();
     await this.repositorioInscripciones.registrarConReserva({
       codigo,
-      turnoId,
-      email,
+      turnoId: inscripcion.turno.id,
+      email: inscripcion.email,
       terminosAceptadosEn: inscripcion.terminosAceptadosEn,
       participantes: inscripcion.participantes,
     });
+    return codigo;
+  }
 
-    const detalle = {
-      codigo,
-      actividad: turno.actividad.nombre,
-      requiereTalle: turno.actividad.requiereTalle,
-      inicio: turno.inicio,
-      fecha: turno.fecha,
-      hora: turno.hora,
-      email,
-      participantes: inscripcion.participantes,
-    };
+  async #notificar(detalle) {
     const qr = await this.generadorQR.generar();
     await this.notificador.enviarConfirmacion({ inscripcion: detalle, qr });
-
-    const { codigo: c, actividad, fecha, hora } = detalle;
-    return { codigo: c, actividad, fecha, hora, email, participantes: inscripcion.participantes };
   }
+}
+
+/** @returns {import('./puertos.js').DetalleInscripcion} */
+function detalleDe(codigo, { turno, email, participantes }) {
+  return {
+    codigo,
+    actividad: turno.actividad.nombre,
+    fecha: turno.fecha,
+    hora: turno.hora,
+    email,
+    participantes,
+    requiereTalle: turno.actividad.requiereTalle,
+    inicio: turno.inicio,
+  };
+}
+
+function respuestaDe({ codigo, actividad, fecha, hora, email, participantes }) {
+  return { codigo, actividad, fecha, hora, email, participantes };
 }
