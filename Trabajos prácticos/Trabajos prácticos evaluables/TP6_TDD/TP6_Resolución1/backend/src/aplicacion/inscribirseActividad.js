@@ -29,12 +29,7 @@ export class InscribirseActividad {
     const inscripcion = await this.#validar(turno, solicitud);
     const { codigo, id } = await this.#registrar(inscripcion);
     const detalle = detalleDe(codigo, inscripcion);
-    try {
-      await this.#notificar(detalle);
-    } catch {
-      await this.repositorioInscripciones.anular(id);
-      throw new EnvioConfirmacionFallido();
-    }
+    await this.#confirmarOAnular(id, detalle);
 
     return respuestaDe(detalle);
   }
@@ -57,21 +52,38 @@ export class InscribirseActividad {
 
   async #registrar(inscripcion) {
     for (let intento = 0; intento < INTENTOS_CODIGO; intento++) {
-      const codigo = this.generadorCodigo.generar();
-      try {
-        const { id } = await this.repositorioInscripciones.registrarConReserva({
-          codigo,
-          turnoId: inscripcion.turno.id,
-          email: inscripcion.email,
-          terminosAceptadosEn: inscripcion.terminosAceptadosEn,
-          participantes: inscripcion.participantes,
-        });
-        return { codigo, id };
-      } catch (error) {
-        if (!(error instanceof CodigoDuplicado)) throw error;
-      }
+      const registrada = await this.#intentarRegistro(this.generadorCodigo.generar(), inscripcion);
+      if (registrada) return registrada;
     }
     throw new Error('No se pudo generar un código de inscripción único');
+  }
+
+  /** @returns {Promise<{ codigo: string, id: string } | null>} `null` si el código ya existe */
+  async #intentarRegistro(codigo, { turno, email, terminosAceptadosEn, participantes }) {
+    try {
+      const { id } = await this.repositorioInscripciones.registrarConReserva({
+        codigo,
+        turnoId: turno.id,
+        email,
+        terminosAceptadosEn,
+        participantes,
+      });
+      return { codigo, id };
+    } catch (error) {
+      if (error instanceof CodigoDuplicado) return null;
+      throw error;
+    }
+  }
+
+  // El mail se envía fuera de la transacción para no bloquear el turno mientras responde el
+  // servidor de correo; si falla, se deshace la inscripción (INT-05).
+  async #confirmarOAnular(id, detalle) {
+    try {
+      await this.#notificar(detalle);
+    } catch {
+      await this.repositorioInscripciones.anular(id);
+      throw new EnvioConfirmacionFallido();
+    }
   }
 
   async #notificar(detalle) {
