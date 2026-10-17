@@ -38,3 +38,7 @@ const CARACTERES_AMBIGUOS = '0O1I';
 export const ALFABETO_CODIGO = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789']
   .filter((caracter) => !CARACTERES_AMBIGUOS.includes(caracter))
   .join('');
+
+export const DURACION_ACTIVIDAD_MIN = 60;
+export const PRIMER_TURNO = '09:00';
+export const ULTIMO_TURNO = '17:00';
