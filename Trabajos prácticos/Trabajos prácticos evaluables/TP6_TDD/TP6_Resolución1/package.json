@@ -21,7 +21,8 @@
     "db:migrate": "npm run db:migrate -w backend",
     "db:seed": "npm run db:seed -w backend",
     "db:migrate:turso": "npm run db:migrate:turso -w backend",
-    "prepare": "node scripts/instalar-hooks.js"
+    "prepare": "node scripts/instalar-hooks.js",
+    "test:e2e": "playwright test"
   },
   "lint-staged": {
     "*.{js,jsx}": [
@@ -34,6 +35,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
+    "@playwright/test": "^1.64.1",
     "@resvg/resvg-js": "^2.6.2",
     "concurrently": "^9.0.0",
     "eslint": "^9.0.0",
