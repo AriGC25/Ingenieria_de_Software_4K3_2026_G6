@@ -17,7 +17,12 @@ export default [
     rules: { 'jsdoc/check-param-names': 'warn', 'jsdoc/require-param-type': 'warn' },
   },
   {
-    files: ['backend/src/main.js', 'backend/database/**/*.js', 'scripts/**/*.js'],
+    files: [
+      'backend/src/main.js',
+      'backend/database/**/*.js',
+      'scripts/**/*.js',
+      'backend/scripts/**/*.js',
+    ],
     rules: { 'no-console': 'off' },
   },
   {

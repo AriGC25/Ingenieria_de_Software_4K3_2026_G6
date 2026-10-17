@@ -1,0 +1,56 @@
+generator client {
+  provider            = "prisma-client"
+  output              = "../generated"
+  moduleFormat        = "esm"
+  importFileExtension = "js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Actividad {
+  id            String  @id
+  nombre        String  @unique
+  requiereTalle Boolean
+  edadMinima    Int?
+  cupoPorTurno  Int
+  terminos      String
+  turnos        Turno[]
+}
+
+model Turno {
+  id            String        @id
+  actividadId   String
+  actividad     Actividad     @relation(fields: [actividadId], references: [id])
+  inicio        DateTime
+  cupoMaximo    Int
+  cupoOcupado   Int           @default(0)
+  inscripciones Inscripcion[]
+
+  @@unique([actividadId, inicio])
+  @@index([inicio])
+}
+
+model Inscripcion {
+  id                  String         @id @default(uuid())
+  codigo              String         @unique
+  turnoId             String
+  turno               Turno          @relation(fields: [turnoId], references: [id])
+  email               String
+  terminosAceptadosEn DateTime
+  creadaEn            DateTime       @default(now())
+  participantes       Participante[]
+}
+
+model Participante {
+  id            String      @id @default(uuid())
+  inscripcionId String
+  inscripcion   Inscripcion @relation(fields: [inscripcionId], references: [id], onDelete: Cascade)
+  nombre        String
+  dni           String
+  edad          Int
+  talle         String?
+
+  @@index([dni])
+}
