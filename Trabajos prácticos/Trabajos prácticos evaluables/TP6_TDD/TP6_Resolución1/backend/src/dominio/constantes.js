@@ -19,3 +19,10 @@ export const CALENDARIO_POR_DEFECTO = Object.freeze({
 
 export const VENTANA_APERTURA_HORAS = 24;
 export const CIERRE_INSCRIPCION_MIN = 15;
+
+export const TALLES = Object.freeze(['XS', 'S', 'M', 'L', 'XL', 'XXL']);
+export const FORMATO_DNI = /^\d{7,8}$/;
+export const FORMATO_NOMBRE = /^[\p{L}\s'’-]+$/u;
+export const EDAD_MINIMA_ADMITIDA = 0;
+export const EDAD_MAXIMA = 100;
+export const NOMBRE_MAX_CARACTERES = 100;
