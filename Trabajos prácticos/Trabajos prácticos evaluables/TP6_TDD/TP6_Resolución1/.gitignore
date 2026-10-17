@@ -1,0 +1,7 @@
+# Secretos y archivos locales (los .env.example sí se versionan)
+.env
+.env.*
+!.env.example
+node_modules
+.vercel
+generated
