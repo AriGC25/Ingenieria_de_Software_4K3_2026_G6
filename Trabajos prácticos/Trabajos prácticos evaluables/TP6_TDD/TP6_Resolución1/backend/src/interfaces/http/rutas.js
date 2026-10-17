@@ -10,43 +10,39 @@ import { esquemaConsultaTurnos, esquemaSolicitudInscripcion } from './esquemas.j
  */
 export function crearRutas(casosDeUso) {
   const rutas = Router();
+  const controladores = [
+    ['get', '/actividades', () => casosDeUso.listarActividades.ejecutar()],
+    ['get', '/fechas', () => casosDeUso.consultarFechas.ejecutar()],
+    [
+      'get',
+      '/actividades/:id/turnos',
+      (req) => {
+        const { fecha } = validar(esquemaConsultaTurnos, req.query, 'fecha');
+        return casosDeUso.consultarTurnos.ejecutar({ actividadId: req.params.id, fecha });
+      },
+    ],
+    [
+      'post',
+      '/inscripciones',
+      (req) =>
+        casosDeUso.inscribirseActividad.ejecutar(validar(esquemaSolicitudInscripcion, req.body)),
+      201,
+    ],
+  ];
 
-  rutas.get(
-    '/actividades',
-    manejar(async (_req, res) => {
-      res.json(await casosDeUso.listarActividades.ejecutar());
-    }),
-  );
-
-  rutas.get(
-    '/fechas',
-    manejar(async (_req, res) => {
-      res.json(await casosDeUso.consultarFechas.ejecutar());
-    }),
-  );
-
-  rutas.get(
-    '/actividades/:id/turnos',
-    manejar(async (req, res) => {
-      const { fecha } = validar(esquemaConsultaTurnos, req.query, 'fecha');
-      res.json(await casosDeUso.consultarTurnos.ejecutar({ actividadId: req.params.id, fecha }));
-    }),
-  );
-
-  rutas.post(
-    '/inscripciones',
-    manejar(async (req, res) => {
-      const solicitud = validar(esquemaSolicitudInscripcion, req.body);
-      res.status(201).json(await casosDeUso.inscribirseActividad.ejecutar(solicitud));
-    }),
-  );
-
+  for (const [metodo, ruta, controlador, estado = 200] of controladores) {
+    rutas[metodo](ruta, responder(controlador, estado));
+  }
   return rutas;
 }
 
-/** Express 4 no captura los rechazos de los controladores asíncronos. */
-function manejar(controlador) {
-  return (req, res, next) => controlador(req, res).catch(next);
+/** Responde en JSON lo que devuelve el controlador; Express 4 no captura los rechazos. */
+function responder(controlador, estado) {
+  return (req, res, next) =>
+    Promise.resolve()
+      .then(() => controlador(req))
+      .then((cuerpo) => res.status(estado).json(cuerpo))
+      .catch(next);
 }
 
 function validar(esquema, datos, campo) {
