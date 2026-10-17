@@ -13,6 +13,10 @@ export const MENSAJES = Object.freeze({
   EDAD_NO_PERMITIDA: (edadMinima) => `Esta actividad es para personas de ${edadMinima} años o más.`,
   TALLE_REQUERIDO: 'Ingresá el talle.',
   SIN_CUPO: 'No quedan cupos suficientes para este horario. Probá con otro.',
+  HORARIO_NO_DISPONIBLE: 'Este horario no está disponible. Elegí otro.',
+  TERMINOS_NO_ACEPTADOS: 'Para continuar, aceptá los términos y condiciones.',
+  INSCRIPCION_SUPERPUESTA: 'Una de las personas ya está inscripta en este horario. Elegí otro.',
+  SOLICITUD_INVALIDA: 'Algo salió mal. Intentá de nuevo en unos minutos.',
 });
 
 /** Error de una regla de negocio. Lleva un `codigo` estable y, si es de un dato, su `campo`. */
@@ -71,5 +75,34 @@ export class TalleRequerido extends ErrorDominio {
 export class SinCupo extends ErrorDominio {
   constructor() {
     super('SIN_CUPO', MENSAJES.SIN_CUPO);
+  }
+}
+
+/** Turno inexistente, en un día cerrado o fuera de la ventana de inscripción. */
+export class HorarioNoDisponible extends ErrorDominio {
+  constructor() {
+    super('HORARIO_NO_DISPONIBLE', MENSAJES.HORARIO_NO_DISPONIBLE);
+  }
+}
+
+/** Los términos y condiciones no se aceptaron. */
+export class TerminosNoAceptados extends ErrorDominio {
+  constructor() {
+    super('TERMINOS_NO_ACEPTADOS', MENSAJES.TERMINOS_NO_ACEPTADOS, 'aceptaTerminos');
+  }
+}
+
+/** Alguna persona ya está inscripta en otro turno que empieza a la misma hora. */
+export class InscripcionSuperpuesta extends ErrorDominio {
+  constructor() {
+    super('INSCRIPCION_SUPERPUESTA', MENSAJES.INSCRIPCION_SUPERPUESTA);
+  }
+}
+
+/** Un dato de la solicitud con una forma imposible (la pantalla nunca lo envía). */
+export class SolicitudInvalida extends ErrorDominio {
+  /** @param {string} [campo] */
+  constructor(campo) {
+    super('SOLICITUD_INVALIDA', MENSAJES.SOLICITUD_INVALIDA, campo);
   }
 }

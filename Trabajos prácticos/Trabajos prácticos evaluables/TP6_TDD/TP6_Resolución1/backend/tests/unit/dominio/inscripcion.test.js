@@ -56,7 +56,7 @@ describe('crearInscripcion', () => {
     expect(error.mensaje).toBe('Agregá al menos una persona.');
   });
 
-  it.each([['no-es-un-email'], [`${'a'.repeat(245)}@mail.com`], ['']])(
+  it.each([['no-es-un-email'], [`${'a'.repeat(246)}@mail.com`], ['']])(
     'INS-04: el email "%s" lanza un error de dominio',
     (email) => {
       const error = errorAlInscribir(unaInscripcion().conEmail(email).build());

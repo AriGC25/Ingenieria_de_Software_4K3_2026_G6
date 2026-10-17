@@ -26,3 +26,6 @@ export const FORMATO_NOMBRE = /^[\p{L}\s'’-]+$/u;
 export const EDAD_MINIMA_ADMITIDA = 0;
 export const EDAD_MAXIMA = 100;
 export const NOMBRE_MAX_CARACTERES = 100;
+
+export const EMAIL_MAX_CARACTERES = 254;
+export const FORMATO_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
