@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="EcoHarmony Park">
+  <path d="M32 4C17 14 8 26 8 38c0 12 10.7 22 24 22s24-10 24-22C56 26 47 14 32 4Z" fill="#386641"/>
+  <path d="M32 58V20" stroke="#F2E8CF" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M16 38c5-4 10-4 16 0s11 4 16 0" stroke="#A7C957" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <path d="M19 28c4-3 8.5-3 13 0s9 3 13 0" stroke="#A7C957" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M18 48c4.5-3.5 9-3.5 14 0s9.5 3.5 14 0" stroke="#A7C957" stroke-width="3" stroke-linecap="round" fill="none"/>
+</svg>

@@ -16,7 +16,7 @@ export const MENSAJES = Object.freeze({
   HORARIO_NO_DISPONIBLE: 'Este horario no está disponible. Elegí otro.',
   TERMINOS_NO_ACEPTADOS: 'Para continuar, aceptá los términos y condiciones.',
   INSCRIPCION_SUPERPUESTA: 'Una de las personas ya está inscripta en este horario. Elegí otro.',
-  SOLICITUD_INVALIDA: 'Algo salió mal. Intentá de nuevo en unos minutos.',
+  ERROR_GENERICO: 'Algo salió mal. Intentá de nuevo en unos minutos.',
   ENVIO_CONFIRMACION_FALLIDO:
     'No pudimos enviarte la confirmación y tu inscripción no se registró. Intentá de nuevo.',
 });
@@ -105,14 +105,14 @@ export class InscripcionSuperpuesta extends ErrorDominio {
 export class SolicitudInvalida extends ErrorDominio {
   /** @param {string} [campo] */
   constructor(campo) {
-    super('SOLICITUD_INVALIDA', MENSAJES.SOLICITUD_INVALIDA, campo);
+    super('SOLICITUD_INVALIDA', MENSAJES.ERROR_GENERICO, campo);
   }
 }
 
 /** Se consultan turnos de una actividad que no existe. */
 export class ActividadInexistente extends ErrorDominio {
   constructor() {
-    super('ACTIVIDAD_INEXISTENTE', MENSAJES.SOLICITUD_INVALIDA);
+    super('ACTIVIDAD_INEXISTENTE', MENSAJES.ERROR_GENERICO);
   }
 }
 
