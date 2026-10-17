@@ -67,6 +67,6 @@
 
 > **[15/10/2026] Resolución de Bloqueantes**
 >
-> Se resolvieron los bloqueantes C-01 a C-07 (días y horarios de apertura, anticipación de la inscripción, cupos por actividad, inscripción grupal, talles, usuario y edades mínimas) con las respuestas de los PO detalladas en [validaciones-po.md](validaciones-po.md).
+> Se resolvieron los bloqueantes C-01 a C-07 (días y horarios de apertura, anticipación de la inscripción, cupos por actividad, inscripción grupal, talles, usuario y edades mínimas) con las respuestas de los PO detalladas en [04-validaciones-po.md](04-validaciones-po.md).
 >
 > La historia cumple el criterio de READY y es posible continuar con el desarrollo.
