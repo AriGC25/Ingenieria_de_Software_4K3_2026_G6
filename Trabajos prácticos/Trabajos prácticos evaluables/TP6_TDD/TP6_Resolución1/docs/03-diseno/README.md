@@ -29,7 +29,7 @@ Diseño de la solución, hecho a partir del [análisis funcional](../02-analisis
 | [14-contenido-y-mensajes.md](14-contenido-y-mensajes.md) | Voz y tono, y textos de la interfaz |
 | [15-accesibilidad.md](15-accesibilidad.md) | Checklist de accesibilidad |
 
-El entregable con la justificación de las decisiones de diseño, `docs/decisiones-diseno.md` (pendiente), está fuera de esta carpeta: reúne las decisiones de diseño (DD-01 a DD-09 y las correcciones de arriba). La estrategia TDD pasó a la [fase de implementación](../04-implementacion/01-estrategia-tdd.md).
+El entregable con la justificación de las decisiones de diseño, [decisiones-diseno.md](../decisiones-diseno.md), está fuera de esta carpeta: reúne las decisiones de diseño (DD-01 a DD-09 y las correcciones de arriba). La estrategia TDD pasó a la [fase de implementación](../04-implementacion/01-estrategia-tdd.md).
 
 ## Del análisis al diseño
 

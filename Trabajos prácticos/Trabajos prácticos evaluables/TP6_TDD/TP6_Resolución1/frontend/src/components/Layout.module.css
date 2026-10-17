@@ -3,3 +3,9 @@
   margin: 0 auto;
   padding: var(--esp-6) var(--esp-4) var(--esp-12);
 }
+
+@media (min-width: 1024px) {
+  .contenido:has([data-ancho='amplio']) {
+    max-width: 1000px;
+  }
+}

@@ -42,23 +42,23 @@
 ### Definición de DONE
 
 **Proceso TDD**
-- [ ] Toda la funcionalidad se construyó con el ciclo Red-Green-Refactor y el historial de commits lo evidencia (`[RED]`, `[GREEN]`, `[REFACTOR]`).
-- [ ] Cada prueba de aceptación tiene al menos una prueba automatizada asociada.
+- [x] Toda la funcionalidad se construyó con el ciclo Red-Green-Refactor y el historial de commits lo evidencia (`[RED]`, `[GREEN]`, `[REFACTOR]`).
+- [x] Cada prueba de aceptación tiene al menos una prueba automatizada asociada.
 
 **Calidad**
-- [ ] Todas las pruebas automatizadas pasan (unitarias, integración y frontend).
-- [ ] Cobertura de al menos 90% en dominio y aplicación, y 70% global.
-- [ ] El código respeta las reglas de estilo del TP 2 y pasa ESLint y Prettier sin errores.
-- [ ] Sin código comentado, sin `console.log` de depuración.
+- [x] Todas las pruebas automatizadas pasan (unitarias, integración y frontend).
+- [x] Cobertura de al menos 90% en dominio y aplicación, y 70% global.
+- [x] El código respeta las reglas de estilo del TP 2 y pasa ESLint y Prettier sin errores.
+- [x] Sin código comentado, sin `console.log` de depuración.
 - [ ] Revisión de código aprobada por al menos un integrante del grupo.
 
 **Funcionalidad**
-- [ ] Se cumplen todos los criterios de aceptación en la aplicación corriendo (front + back + base).
-- [ ] La UI cumple el design system y el checklist de accesibilidad.
+- [x] Se cumplen todos los criterios de aceptación en la aplicación corriendo (front + back + base).
+- [x] La UI cumple el design system y el checklist de accesibilidad.
 
 **Documentación y entrega**
-- [ ] README con instrucciones para instalar, correr la app y ejecutar las pruebas.
-- [ ] Documento de decisiones de diseño (`docs/decisiones-diseno.md`) actualizado.
+- [x] README con instrucciones para instalar, correr la app y ejecutar las pruebas.
+- [x] Documento de decisiones de diseño (`docs/decisiones-diseno.md`) actualizado.
 - [ ] Integrado en `main` y entregado según la consigna.
 
 ---

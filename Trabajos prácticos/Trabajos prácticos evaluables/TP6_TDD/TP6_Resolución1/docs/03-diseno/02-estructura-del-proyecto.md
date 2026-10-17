@@ -68,7 +68,7 @@ TP6_Resolución1/
 │   ├── 05-testing/                  # Análisis de casos de prueba
 │   ├── 06-despliegue/               # Despliegue de la demo
 │   ├── supuestos.md                 # Supuestos y definiciones de todas las fases
-│   └── decisiones-diseno.md         # Entregable: justificación de las decisiones de diseño (pendiente)
+│   └── decisiones-diseno.md         # Entregable: justificación de las decisiones de diseño
 └── README.md
 ```
 

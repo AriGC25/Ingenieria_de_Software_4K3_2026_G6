@@ -28,17 +28,19 @@ export function PaginaConfirmacion() {
   const { participantes, cantidad } = getValues();
 
   return (
-    <div className={styles.paso}>
+    <div className={`${styles.paso} ${styles.confirmacion}`} data-ancho="amplio">
       <Stepper pasoActual={4} />
       <h1>Confirmá la inscripción</h1>
-      <ResumenInscripcion
-        actividad={actividad.nombre}
-        fecha={fecha}
-        hora={turno.hora}
-        email={email}
-        requiereTalle={actividad.requiereTalle}
-        participantes={participantes.slice(0, cantidad)}
-      />
+      <div className={styles.resumenLateral}>
+        <ResumenInscripcion
+          actividad={actividad.nombre}
+          fecha={fecha}
+          hora={turno.hora}
+          email={email}
+          requiereTalle={actividad.requiereTalle}
+          participantes={participantes.slice(0, cantidad)}
+        />
+      </div>
       <Checkbox
         id="aceptaTerminos"
         label={
