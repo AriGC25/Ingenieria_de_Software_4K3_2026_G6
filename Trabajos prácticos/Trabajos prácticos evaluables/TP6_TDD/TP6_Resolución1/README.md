@@ -43,13 +43,13 @@ La documentación está en `docs/`, con una carpeta por fase del proyecto. Dentr
 | 6. Despliegue | [README.md](docs/06-despliegue/README.md) | Índice de la fase |
 | | [01 a 04](docs/06-despliegue/README.md) | Decisión y prueba, configuración de la demo, procedimiento y riesgos |
 | Todas | [supuestos.md](docs/supuestos.md) | Supuestos y definiciones de todas las fases (S-01 a S-41) |
-| Entregable | `docs/decisiones-diseno.md` | Justificación de las decisiones de diseño (pendiente) |
+| Entregable | [decisiones-diseno.md](docs/decisiones-diseno.md) | Justificación de las decisiones de diseño y de implementación |
 
 ## Stack
 
 - **Backend:** Node.js 22, Express 4, Zod, Prisma 7 (SQLite en local, Turso en la demo), Nodemailer, qrcode y date-fns.
 - **Frontend:** React 18, Vite, React Router, React Hook Form, CSS Modules (fuente Lato y paleta del PO).
-- **Pruebas:** Vitest, Supertest, Testing Library, MSW (Playwright opcional).
+- **Pruebas:** Vitest, Supertest, Testing Library, MSW, Playwright y axe (accesibilidad).
 - **Calidad:** ESLint, Prettier, Husky/lint-staged.
 - **Demo:** Vercel, Turso y Gmail SMTP.
 
@@ -58,9 +58,12 @@ El backend sigue una arquitectura de puertos y adaptadores (dominio, aplicación
 ## Estructura
 
 ```
+api/         Entrada de Vercel (reexporta la app del backend)
 backend/     API REST (src/dominio, src/aplicacion, src/infraestructura, src/interfaces, database/, tests/)
 frontend/    SPA con el formulario por pasos
-docs/        Una carpeta por fase (00-dominio a 06-despliegue)
+e2e/         Pruebas de punta a punta (Playwright, Mailpit y axe)
+scripts/     Hooks de Git y generación del logo PNG del mail
+docs/        Una carpeta por fase (00-dominio a 06-despliegue) y las decisiones de diseño
 ```
 
 El detalle está en la [estructura del proyecto](docs/03-diseno/02-estructura-del-proyecto.md).
@@ -68,7 +71,7 @@ El detalle está en la [estructura del proyecto](docs/03-diseno/02-estructura-de
 ## Requisitos
 
 - Node.js 22 LTS y npm (el repositorio incluye un `.nvmrc`).
-- Opcional: Docker, para levantar [Mailpit](https://mailpit.axllent.org/) y ver los emails enviados.
+- Docker, para levantar [Mailpit](https://mailpit.axllent.org/): muestra los mails enviados en desarrollo y lo usan las pruebas E2E.
 
 ## Instalación y ejecución
 
@@ -76,7 +79,7 @@ El detalle está en la [estructura del proyecto](docs/03-diseno/02-estructura-de
 # 1. Instalar dependencias
 npm install
 
-# 2. Configurar variables de entorno
+# 2. Configurar variables de entorno (dejar vacías las de Turso para trabajar en local)
 cp backend/.env.example backend/.env
 
 # 3. Crear la base de datos y cargar actividades, términos y turnos de los próximos 7 días
@@ -93,6 +96,8 @@ npm run dev
 - Frontend: <http://localhost:5173>
 - Backend (API): <http://localhost:3000/api>
 - Mailpit (bandeja de entrada de prueba): <http://localhost:8025>
+
+`npm install` también genera el cliente de Prisma (`postinstall`). Si `backend/.env` tiene `TURSO_DATABASE_URL`, el backend y el seed usan Turso en lugar de la base local: para desarrollar, esa variable queda vacía.
 
 ### Variables de entorno
 
@@ -114,8 +119,21 @@ Las principales; la lista completa y sus valores por defecto están en la [confi
 | `npm run test:watch` | Modo TDD (Vitest en `watch`) |
 | `npm run test:coverage` | Reporte de cobertura |
 | `npm run lint` | ESLint + Prettier |
+| `npm run test:e2e` | Pruebas de punta a punta con Playwright (ver abajo) |
 
-Cobertura mínima: 90% de líneas en `dominio/` y `aplicacion/`, y 70% global.
+Cobertura mínima: 90% de líneas en `dominio/` y `aplicacion/`, y 70% global. Resultado actual: 283 pruebas en el backend (100% en dominio y aplicación, 99,9% global), 95 en el frontend (98%) y 8 E2E.
+
+### Pruebas de punta a punta
+
+Levantan el backend y el frontend con una base SQLite propia (`e2e/e2e.db`), el reloj fijo en el martes 20/10/2026 09:00 y Mailpit, y no usan `backend/.env`:
+
+```bash
+docker run -d --name mailpit -p 1025:1025 -p 8025:8025 axllent/mailpit
+npx playwright install chromium     # una sola vez; o usar Chrome con E2E_CANAL=chrome
+npm run test:e2e
+```
+
+Cubren las pruebas de aceptación principales (E2E-01 a E2E-07: inscripción con el mail y su QR, sin cupo y carrera por el último lugar, actividad sin talle, día cerrado y ventana, términos, talle requerido y la pantalla del QR) y un análisis de accesibilidad WCAG 2.1 AA con axe.
 
 ## Metodología: TDD
 
@@ -128,6 +146,10 @@ refactor(dominio): [REFACTOR] extraer estaAbierto
 ```
 
 Se avanza de adentro hacia afuera (dominio, aplicación, API y frontend). La metodología está en la [estrategia TDD](docs/04-implementacion/01-estrategia-tdd.md) y el orden de construcción, en las [fases](docs/04-implementacion/03-fases.md).
+
+## Despliegue
+
+La demo se despliega en Vercel (frontend y API), con Turso como base y Gmail para el correo. `vercel.json`, `.vercelignore` y `api/index.js` ya están listos; los pasos (migraciones y seed contra Turso, variables y prueba) están en el [procedimiento de despliegue](docs/06-despliegue/03-procedimiento.md).
 
 ## API
 

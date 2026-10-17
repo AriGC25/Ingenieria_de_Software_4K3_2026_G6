@@ -1,0 +1,14 @@
+# Nunca se suben secretos ni datos locales
+**/.env
+**/.env.*
+!**/.env.example
+**/*.db
+**/*.db-journal
+node_modules
+**/node_modules
+frontend/dist
+backend/generated
+coverage
+test-results
+playwright-report
+e2e
