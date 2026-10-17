@@ -1,0 +1,15 @@
+.persona {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-4);
+  margin: 0;
+  padding: var(--esp-4);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-medio);
+  background-color: var(--color-superficie);
+}
+
+.titulo {
+  padding: 0 var(--esp-2);
+  font: var(--texto-h3);
+}

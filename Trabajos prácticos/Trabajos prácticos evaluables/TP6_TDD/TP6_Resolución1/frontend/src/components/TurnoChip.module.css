@@ -1,0 +1,45 @@
+.chip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
+  min-height: var(--area-tactil);
+  padding: var(--esp-2) var(--esp-4);
+  border: 2px solid var(--color-secundario);
+  border-radius: var(--radio-medio);
+  background-color: var(--color-superficie);
+  color: var(--color-texto);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--transicion);
+}
+
+.chip:hover:not(:disabled) {
+  background-color: #f7fbef;
+}
+
+.hora {
+  font: var(--texto-h3);
+}
+
+.detalle {
+  font: var(--texto-chico);
+  color: var(--color-texto-secundario);
+}
+
+.seleccionado {
+  border-color: var(--color-primario);
+  background-color: var(--color-primario);
+  color: var(--color-superficie);
+}
+
+.seleccionado .detalle {
+  color: var(--color-superficie);
+}
+
+.chip:disabled {
+  border-color: var(--color-borde);
+  background-color: var(--color-fondo);
+  cursor: not-allowed;
+}

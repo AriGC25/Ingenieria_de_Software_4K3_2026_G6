@@ -1,0 +1,61 @@
+.tarjeta {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--esp-1);
+  width: 100%;
+  min-height: 112px;
+  padding: var(--esp-4) var(--esp-4) var(--esp-4) var(--esp-6);
+  overflow: hidden;
+  border: 2px solid var(--color-borde);
+  border-radius: var(--radio-medio);
+  background-color: var(--color-superficie);
+  box-shadow: var(--sombra-1);
+  color: var(--color-texto);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--transicion);
+}
+
+.tarjeta:hover:not(:disabled) {
+  border-color: var(--color-secundario);
+}
+
+.franja {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 8px;
+  background-color: var(--color-actividad);
+}
+
+.nombre {
+  font: var(--texto-h3);
+}
+
+.detalle {
+  font: var(--texto-chico);
+  color: var(--color-texto-secundario);
+}
+
+.seleccionada {
+  border-color: var(--color-primario);
+  background-color: #f7fbef;
+}
+
+.tarjeta:disabled {
+  cursor: not-allowed;
+  background-color: var(--color-fondo);
+}
+
+.tarjeta:disabled .franja {
+  background-color: var(--color-deshabilitado);
+}
+
+.sinCupos {
+  margin-top: var(--esp-1);
+  padding: 0 var(--esp-2);
+  border-radius: var(--radio-total);
+  background-color: var(--color-deshabilitado);
+  font: var(--texto-etiqueta);
+}

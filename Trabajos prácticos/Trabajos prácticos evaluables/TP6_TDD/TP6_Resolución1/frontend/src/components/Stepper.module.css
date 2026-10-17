@@ -1,0 +1,46 @@
+.pasos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--esp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.paso {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--esp-1);
+  color: var(--color-texto-secundario);
+  font: var(--texto-chico);
+  text-align: center;
+}
+
+.numero {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--color-deshabilitado);
+  border-radius: 50%;
+  background-color: var(--color-superficie);
+  font-weight: 700;
+}
+
+.completado .numero {
+  border-color: var(--color-secundario);
+  background-color: var(--color-acento);
+  color: var(--color-texto);
+}
+
+.actual {
+  color: var(--color-texto);
+  font-weight: 700;
+}
+
+.actual .numero {
+  border-color: var(--color-primario);
+  background-color: var(--color-primario);
+  color: var(--color-superficie);
+}

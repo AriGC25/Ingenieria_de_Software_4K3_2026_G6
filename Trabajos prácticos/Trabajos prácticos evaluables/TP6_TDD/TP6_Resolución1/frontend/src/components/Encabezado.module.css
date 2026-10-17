@@ -1,0 +1,35 @@
+.encabezado {
+  background-color: var(--color-superficie);
+  border-bottom: 1px solid var(--color-borde);
+}
+
+.contenido {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-2);
+  max-width: var(--ancho-contenido);
+  margin: 0 auto;
+  padding: var(--esp-3) var(--esp-4);
+}
+
+.logo {
+  height: 40px;
+  width: auto;
+}
+
+.sesion {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  min-width: 0;
+}
+
+.email {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: var(--texto-chico);
+  color: var(--color-texto-secundario);
+}
