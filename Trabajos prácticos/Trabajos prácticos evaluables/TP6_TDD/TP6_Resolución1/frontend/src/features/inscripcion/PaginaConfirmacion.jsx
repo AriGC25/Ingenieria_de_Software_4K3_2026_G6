@@ -11,6 +11,7 @@ import { AccionesDelPaso } from './AccionesDelPaso.jsx';
 import { AvisoEnfocado } from './AvisoEnfocado.jsx';
 import { useInscripcion } from './InscripcionContexto.jsx';
 import styles from './Pasos.module.css';
+import { MENSAJES } from './mensajes.js';
 import { useEnvioInscripcion } from './useEnvioInscripcion.js';
 
 const ELEGIR_OTRO_HORARIO = ['SIN_CUPO', 'HORARIO_NO_DISPONIBLE'];
@@ -78,7 +79,7 @@ export function PaginaConfirmacion() {
         onContinuar={confirmar}
         textoContinuar="Confirmar inscripción"
         cargando={enviando}
-        deshabilitado={!watch('aceptaTerminos')}
+        motivoDeshabilitado={watch('aceptaTerminos') ? null : MENSAJES.terminosParaConfirmar}
       />
     </div>
   );

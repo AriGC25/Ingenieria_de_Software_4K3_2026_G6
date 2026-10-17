@@ -51,7 +51,17 @@
 @media (min-width: 600px) {
   .acciones {
     flex-direction: row;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .acciones > p {
+    flex-basis: 100%;
+    text-align: right;
+  }
+
+  .acciones > button:first-of-type:not(:last-child) {
+    margin-right: auto;
   }
 }
 

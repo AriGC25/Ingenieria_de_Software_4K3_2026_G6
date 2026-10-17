@@ -10,4 +10,5 @@ export const MENSAJES = Object.freeze({
   sinPersonas: 'Agregá al menos una persona.',
   maximoPersonas: (cupos) => `Podés inscribir hasta ${cupos} personas en este horario.`,
   terminos: 'Para continuar, aceptá los términos y condiciones.',
+  terminosParaConfirmar: 'Para confirmar, aceptá los términos y condiciones.',
 });
