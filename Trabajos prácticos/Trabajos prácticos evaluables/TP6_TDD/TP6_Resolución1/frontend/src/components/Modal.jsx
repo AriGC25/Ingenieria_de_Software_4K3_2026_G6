@@ -1,9 +1,7 @@
-import { useEffect, useId, useRef } from 'react';
+import { useId } from 'react';
+import { useFocoAtrapado } from '../hooks/useFocoAtrapado.js';
 import { Button } from './Button.jsx';
 import styles from './Modal.module.css';
-
-const ENFOCABLES =
-  'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
 /**
  * Diálogo modal: atrapa el foco, se cierra con `Esc` o con "Cerrar" y devuelve el foco al
@@ -13,14 +11,7 @@ const ENFOCABLES =
  */
 export function Modal({ abierto, titulo, onCerrar, children }) {
   const idTitulo = useId();
-  const dialogo = useRef(null);
-
-  useEffect(() => {
-    if (!abierto) return undefined;
-    const quienLoAbrio = document.activeElement;
-    dialogo.current.querySelector(ENFOCABLES)?.focus();
-    return () => quienLoAbrio?.focus();
-  }, [abierto]);
+  const { contenedor, alPresionarTab } = useFocoAtrapado(abierto);
 
   if (!abierto) return null;
 
@@ -29,13 +20,13 @@ export function Modal({ abierto, titulo, onCerrar, children }) {
       evento.stopPropagation();
       onCerrar();
     }
-    if (evento.key === 'Tab') atraparFoco(evento, dialogo.current);
+    if (evento.key === 'Tab') alPresionarTab(evento);
   }
 
   return (
     <div className={styles.fondo} onClick={onCerrar}>
       <div
-        ref={dialogo}
+        ref={contenedor}
         role="dialog"
         aria-modal="true"
         aria-labelledby={idTitulo}
@@ -55,17 +46,4 @@ export function Modal({ abierto, titulo, onCerrar, children }) {
       </div>
     </div>
   );
-}
-
-function atraparFoco(evento, contenedor) {
-  const enfocables = [...contenedor.querySelectorAll(ENFOCABLES)];
-  const primero = enfocables[0];
-  const ultimo = enfocables.at(-1);
-  if (evento.shiftKey && document.activeElement === primero) {
-    evento.preventDefault();
-    ultimo.focus();
-  } else if (!evento.shiftKey && document.activeElement === ultimo) {
-    evento.preventDefault();
-    primero.focus();
-  }
 }
