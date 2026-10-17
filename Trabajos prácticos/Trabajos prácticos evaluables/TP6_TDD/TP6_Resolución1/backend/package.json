@@ -1,0 +1,37 @@
+{
+  "name": "@ecoharmony/backend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --env-file-if-exists=.env src/main.js",
+    "start": "node src/main.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "db:migrate": "prisma migrate dev && node scripts/compilarClientePrisma.js",
+    "db:seed": "node --env-file-if-exists=.env database/seed.js",
+    "db:migrate:turso": "node --env-file-if-exists=.env database/migrarTurso.js",
+    "generate": "prisma generate && node scripts/compilarClientePrisma.js",
+    "postinstall": "npm run generate"
+  },
+  "dependencies": {
+    "@date-fns/tz": "^1.2.0",
+    "@libsql/client": "^0.17.4",
+    "@prisma/adapter-libsql": "^7.0.0",
+    "@prisma/client": "^7.0.0",
+    "date-fns": "^4.1.0",
+    "express": "^4.21.0",
+    "nodemailer": "^10.1.2",
+    "qrcode": "^1.5.4",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^2.1.0",
+    "jsqr": "^1.4.0",
+    "pngjs": "^7.0.0",
+    "prisma": "^7.0.0",
+    "supertest": "^7.0.0",
+    "vitest": "^2.1.0"
+  }
+}
