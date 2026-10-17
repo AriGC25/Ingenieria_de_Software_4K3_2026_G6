@@ -11,34 +11,36 @@ import { ACTIVIDADES } from './datosMaestros.js';
  * @returns {Promise<{ turnosCreados: number }>}
  */
 export async function sembrarDatos(prisma, { ahora, calendario, diasAdelante }) {
+  await guardarActividades(prisma);
+  const fechas = fechasAbiertas(ahora, diasAdelante, calendario);
+  const turnos = ACTIVIDADES.flatMap((actividad) =>
+    fechas.flatMap((fecha) => turnosDelDia(actividad, fecha)),
+  );
+  return { turnosCreados: await crearFaltantes(prisma, turnos) };
+}
+
+async function guardarActividades(prisma) {
   for (const { id, ...datos } of ACTIVIDADES) {
     await prisma.actividad.upsert({ where: { id }, create: { id, ...datos }, update: datos });
   }
-
-  const fechas = Array.from({ length: diasAdelante }, (_, i) =>
-    fechaArgentina(addDays(ahora, i)),
-  ).filter((fecha) => calendario.estaAbierto(fecha));
-  const turnos = ACTIVIDADES.flatMap((actividad) =>
-    fechas.flatMap((fecha) =>
-      horasDeTurno().map((hora) => ({
-        id: `t-${actividad.id}-${fecha}-${hora.slice(0, 2)}`,
-        actividadId: actividad.id,
-        inicio: instanteArgentino(fecha, hora),
-        cupoMaximo: actividad.cupoPorTurno,
-      })),
-    ),
-  );
-
-  const existentes = await prisma.turno.findMany({
-    where: { id: { in: turnos.map((t) => t.id) } },
-    select: { id: true },
-  });
-  const ids = new Set(existentes.map((t) => t.id));
-  const nuevos = turnos.filter((t) => !ids.has(t.id));
-  if (nuevos.length > 0) await prisma.turno.createMany({ data: nuevos });
-  return { turnosCreados: nuevos.length };
 }
 
+function fechasAbiertas(ahora, diasAdelante, calendario) {
+  return Array.from({ length: diasAdelante }, (_, i) => fechaArgentina(addDays(ahora, i))).filter(
+    (fecha) => calendario.estaAbierto(fecha),
+  );
+}
+
+function turnosDelDia(actividad, fecha) {
+  return horasDeTurno().map((hora) => ({
+    id: `t-${actividad.id}-${fecha}-${hora.slice(0, 2)}`,
+    actividadId: actividad.id,
+    inicio: instanteArgentino(fecha, hora),
+    cupoMaximo: actividad.cupoPorTurno,
+  }));
+}
+
+/** De 09:00 a 17:00, una por hora (RN-02). */
 function horasDeTurno() {
   const desde = Number(PRIMER_TURNO.slice(0, 2));
   const hasta = Number(ULTIMO_TURNO.slice(0, 2));
@@ -46,4 +48,15 @@ function horasDeTurno() {
     { length: hasta - desde + 1 },
     (_, i) => `${String(desde + i).padStart(2, '0')}:00`,
   );
+}
+
+async function crearFaltantes(prisma, turnos) {
+  const existentes = await prisma.turno.findMany({
+    where: { id: { in: turnos.map((t) => t.id) } },
+    select: { id: true },
+  });
+  const ids = new Set(existentes.map((t) => t.id));
+  const nuevos = turnos.filter((t) => !ids.has(t.id));
+  if (nuevos.length > 0) await prisma.turno.createMany({ data: nuevos });
+  return nuevos.length;
 }
