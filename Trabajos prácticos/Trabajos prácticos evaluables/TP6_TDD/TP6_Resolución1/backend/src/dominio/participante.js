@@ -74,17 +74,38 @@ export function tieneTalle(talle) {
 }
 
 /**
+ * Valida los datos de un participante en el orden nombre, DNI, edad y talle. Cada actividad
+ * suma sus propias reglas en el punto que le corresponde de ese orden.
+ * @param {{ nombre: unknown, dni: unknown, edad: unknown, talle?: unknown }} datos
+ * @param {number} indice posición en la solicitud, para indicar el campo del error
+ * @param {{ despuesDelDni?: (dni: string, campo: string) => void,
+ *   despuesDeLaEdad?: (edad: number, campo: string) => void,
+ *   talle?: (talle: unknown, campo: string) => string | null }} [reglas]
+ * @returns {{ nombre: string, dni: string, edad: number, talle: string | null }}
+ * @throws {import('./errores.js').ErrorDominio}
+ */
+export function validarParticipante(datos, indice, reglas = {}) {
+  const { despuesDelDni = () => {}, despuesDeLaEdad = () => {}, talle = talleOpcional } = reglas;
+  const campo = (dato) => campoDe(indice, dato);
+  const nombre = validarNombre(datos.nombre, campo('nombre'));
+  const dni = validarDni(datos.dni, campo('dni'));
+  despuesDelDni(dni, campo('dni'));
+  const edad = validarEdad(datos.edad, campo('edad'));
+  despuesDeLaEdad(edad, campo('edad'));
+  return Object.freeze({ nombre, dni, edad, talle: talle(datos.talle, campo('talle')) });
+}
+
+function talleOpcional(talle, campo) {
+  return tieneTalle(talle) ? validarTalle(talle, campo) : null;
+}
+
+/**
  * Crea un participante validando sus datos en orden: nombre, DNI, edad y talle (si se envió).
  * @param {{ nombre: unknown, dni: unknown, edad: unknown, talle?: unknown }} datos
  * @param {number} [indice] posición en la solicitud, para indicar el campo del error
  * @returns {{ nombre: string, dni: string, edad: number, talle: string | null }}
- * @throws {DatosParticipanteInvalidos}
+ * @throws {import('./errores.js').DatosParticipanteInvalidos}
  */
 export function crearParticipante(datos, indice = 0) {
-  return Object.freeze({
-    nombre: validarNombre(datos.nombre, campoDe(indice, 'nombre')),
-    dni: validarDni(datos.dni, campoDe(indice, 'dni')),
-    edad: validarEdad(datos.edad, campoDe(indice, 'edad')),
-    talle: tieneTalle(datos.talle) ? validarTalle(datos.talle, campoDe(indice, 'talle')) : null,
-  });
+  return validarParticipante(datos, indice);
 }

@@ -1,12 +1,5 @@
 import { DniRepetido, EdadNoPermitida, TalleRequerido } from './errores.js';
-import {
-  campoDe,
-  tieneTalle,
-  validarDni,
-  validarEdad,
-  validarNombre,
-  validarTalle,
-} from './participante.js';
+import { tieneTalle, validarParticipante, validarTalle } from './participante.js';
 
 /** Una de las actividades del parque, con sus requisitos de participación. */
 export class Actividad {
@@ -33,15 +26,17 @@ export class Actividad {
    * @throws {import('./errores.js').ErrorDominio}
    */
   prepararParticipante(datos, { indice = 0, dnisPrevios = [] } = {}) {
-    const campo = (dato) => campoDe(indice, dato);
-    const nombre = validarNombre(datos.nombre, campo('nombre'));
-    const dni = validarDni(datos.dni, campo('dni'));
-    if (dnisPrevios.includes(dni)) throw new DniRepetido(campo('dni'));
-    const edad = validarEdad(datos.edad, campo('edad'));
-    if (this.edadMinima !== null && edad < this.edadMinima) {
-      throw new EdadNoPermitida(campo('edad'), this.edadMinima);
-    }
-    return Object.freeze({ nombre, dni, edad, talle: this.#talleDe(datos.talle, campo('talle')) });
+    return validarParticipante(datos, indice, {
+      despuesDelDni: (dni, campo) => {
+        if (dnisPrevios.includes(dni)) throw new DniRepetido(campo);
+      },
+      despuesDeLaEdad: (edad, campo) => {
+        if (this.edadMinima !== null && edad < this.edadMinima) {
+          throw new EdadNoPermitida(campo, this.edadMinima);
+        }
+      },
+      talle: (talle, campo) => this.#talleDe(talle, campo),
+    });
   }
 
   #talleDe(talle, campo) {

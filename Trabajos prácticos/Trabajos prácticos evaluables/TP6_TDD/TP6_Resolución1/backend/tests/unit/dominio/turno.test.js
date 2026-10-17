@@ -43,15 +43,18 @@ describe('Turno', () => {
     },
   );
 
-  it.each([
-    ['09', 'ya_empezo'],
-    ['2026-10-21 10', 'todavia_no_abre'],
-  ])('TUR-05: el turno de las %s está no_disponible por %s', (cuando, motivo) => {
-    const [fecha, hora] = cuando.includes(' ') ? cuando.split(' ') : ['2026-10-20', cuando];
+  it('TUR-05: el turno que ya empezó está no_disponible por ya_empezo', () => {
+    expect(unTurno().aLas('09').build().estado(AHORA, calendario)).toEqual({
+      estado: 'no_disponible',
+      motivo: 'ya_empezo',
+    });
+  });
 
-    const estado = unTurno().el(fecha, hora).build().estado(AHORA, calendario);
-
-    expect(estado).toEqual({ estado: 'no_disponible', motivo });
+  it('TUR-05: el turno a más de 24 h está no_disponible por todavia_no_abre', () => {
+    expect(unTurno().el('2026-10-21', '10').build().estado(AHORA, calendario)).toEqual({
+      estado: 'no_disponible',
+      motivo: 'todavia_no_abre',
+    });
   });
 
   it('TUR-05: a menos de 15 minutos del inicio está no_disponible por inscripcion_cerrada', () => {
