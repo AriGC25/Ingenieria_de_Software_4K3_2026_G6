@@ -1,5 +1,5 @@
 import { TZDate } from '@date-fns/tz';
-import { format } from 'date-fns';
+import { addDays, format } from 'date-fns';
 import { ZONA_HORARIA } from './constantes.js';
 
 /**
@@ -38,4 +38,12 @@ export function fechaArgentina(instante) {
  */
 export function horaArgentina(instante) {
   return format(new TZDate(instante, ZONA_HORARIA), 'HH:mm');
+}
+
+/**
+ * @param {string} fecha `YYYY-MM-DD`
+ * @returns {string} el día siguiente, `YYYY-MM-DD`
+ */
+export function diaSiguiente(fecha) {
+  return fechaArgentina(addDays(instanteArgentino(fecha, '12:00'), 1));
 }
