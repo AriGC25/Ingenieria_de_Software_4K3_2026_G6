@@ -91,7 +91,7 @@ describe('mail de confirmación', () => {
   it('TPL-07: el mail no incluye montos ni un enlace a los términos', () => {
     const { html } = armarMailConfirmacion(unDetalleDeInscripcion(), APP_URL);
 
-    expect(html).not.toMatch(/\$|ARS|precio|monto/i);
+    expect(html).not.toMatch(/\$\s?\d|\bARS\b|precio|monto|costo/i);
     expect(html).not.toMatch(/t[ée]rminos/i);
   });
 });
