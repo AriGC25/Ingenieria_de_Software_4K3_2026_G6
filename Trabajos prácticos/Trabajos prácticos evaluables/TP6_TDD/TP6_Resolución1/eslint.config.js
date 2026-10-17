@@ -9,7 +9,16 @@ export default [
   js.configs.recommended,
   {
     languageOptions: { ecmaVersion: 2023, sourceType: 'module', globals: globals.node },
-    rules: { 'no-console': 'error', eqeqeq: 'error', 'no-var': 'error', 'prefer-const': 'error' },
+    rules: {
+      'no-console': 'error',
+      eqeqeq: 'error',
+      'no-var': 'error',
+      'prefer-const': 'error',
+      'no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', ignoreRestSiblings: true },
+      ],
+    },
   },
   {
     files: ['backend/src/**/*.js'],
