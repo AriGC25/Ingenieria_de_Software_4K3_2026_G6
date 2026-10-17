@@ -4,7 +4,11 @@ import { describe, expect, it } from 'vitest';
 import { renderizarEn } from '../renderizar.jsx';
 
 async function ingresar(email, contrasena) {
-  if (email) await userEvent.type(screen.getByRole('textbox', { name: /Email/ }), email);
+  if (email) {
+    // Se pega en lugar de tipear: los emails largos de los valores límite hacen lenta la prueba.
+    await userEvent.click(screen.getByRole('textbox', { name: /Email/ }));
+    await userEvent.paste(email);
+  }
   if (contrasena) await userEvent.type(screen.getByLabelText(/Contraseña/), contrasena);
   await userEvent.click(screen.getByRole('button', { name: 'Ingresar' }));
 }

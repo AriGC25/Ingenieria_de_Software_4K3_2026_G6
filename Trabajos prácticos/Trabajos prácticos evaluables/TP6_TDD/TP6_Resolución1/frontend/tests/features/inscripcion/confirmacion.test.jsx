@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse, delay } from 'msw';
 import { describe, expect, it } from 'vitest';
@@ -179,7 +179,8 @@ describe('paso 4: confirmación', () => {
     const persona2 = screen.getByRole('group', { name: 'Persona 2' });
     const edad = within(persona2).getByRole('spinbutton', { name: /Edad/ });
     expect(edad).toHaveAccessibleDescription('Esta actividad es para personas de 8 años o más.');
-    expect(edad).toHaveFocus();
+    // React Hook Form enfoca en un setTimeout.
+    await waitFor(() => expect(edad).toHaveFocus());
   });
 
   it('INS-UI-12: si falla el envío del mail, muestra el error y permite reintentar sin perder los datos', async () => {

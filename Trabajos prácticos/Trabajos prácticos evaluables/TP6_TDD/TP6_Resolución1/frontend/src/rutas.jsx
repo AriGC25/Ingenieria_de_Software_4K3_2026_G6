@@ -5,6 +5,7 @@ import { PaginaActividad } from './features/inscripcion/PaginaActividad.jsx';
 import { PaginaConfirmacion } from './features/inscripcion/PaginaConfirmacion.jsx';
 import { PaginaHorario } from './features/inscripcion/PaginaHorario.jsx';
 import { PaginaParticipantes } from './features/inscripcion/PaginaParticipantes.jsx';
+import { PaginaResultado } from './features/inscripcion/PaginaResultado.jsx';
 import { PasoPendiente } from './features/inscripcion/PasoPendiente.jsx';
 import { PaginaIngreso } from './features/sesion/PaginaIngreso.jsx';
 import { RutaProtegida } from './features/sesion/RutaProtegida.jsx';
@@ -39,6 +40,7 @@ export function Aplicacion() {
                   }
                 />
               ))}
+              <Route path="resultado" element={<PaginaResultado />} />
               <Route path="*" element={<Navigate to="/inscripcion/actividad" replace />} />
             </Route>
           </Route>

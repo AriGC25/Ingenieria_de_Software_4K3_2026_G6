@@ -1,9 +1,10 @@
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 const InscripcionContexto = createContext(null);
 
 const VALORES_INICIALES = { cantidad: 1, participantes: [], aceptaTerminos: false };
+const SIN_ELECCION = { actividad: null, fecha: null, turno: null };
 
 /**
  * Estado de la inscripción en curso: la actividad, la fecha y el turno elegidos, y un único
@@ -12,14 +13,15 @@ const VALORES_INICIALES = { cantidad: 1, participantes: [], aceptaTerminos: fals
  */
 export function InscripcionProvider({ children }) {
   const formulario = useForm({ defaultValues: VALORES_INICIALES });
-  const [eleccion, setEleccion] = useState({ actividad: null, fecha: null, turno: null });
+  const [eleccion, setEleccion] = useState(SIN_ELECCION);
   const [participantesListos, setParticipantesListos] = useState(false);
   const [resultado, setResultado] = useState(null);
+  const campoAEnfocar = useRef(null);
 
   const elegirActividad = useCallback((actividad) => {
     setParticipantesListos(false);
     setEleccion((actual) =>
-      actual.actividad?.id === actividad.id ? actual : { actividad, fecha: null, turno: null },
+      actual.actividad?.id === actividad.id ? actual : { ...SIN_ELECCION, actividad },
     );
   }, []);
 
@@ -32,12 +34,24 @@ export function InscripcionProvider({ children }) {
     setEleccion((actual) => ({ ...actual, turno }));
   }, []);
 
+  /** Recuerda el campo a enfocar cuando se vuelve a su paso por un error de la API. */
+  const enfocarAlVolver = useCallback((campo) => {
+    campoAEnfocar.current = campo;
+  }, []);
+
+  const tomarCampoAEnfocar = useCallback(() => {
+    const campo = campoAEnfocar.current;
+    campoAEnfocar.current = null;
+    return campo;
+  }, []);
+
+  const { reset } = formulario;
   const reiniciar = useCallback(() => {
-    formulario.reset(VALORES_INICIALES);
-    setEleccion({ actividad: null, fecha: null, turno: null });
+    reset(VALORES_INICIALES);
+    setEleccion(SIN_ELECCION);
     setParticipantesListos(false);
     setResultado(null);
-  }, [formulario]);
+  }, [reset]);
 
   const valor = useMemo(
     () => ({
@@ -50,6 +64,8 @@ export function InscripcionProvider({ children }) {
       setParticipantesListos,
       setResultado,
       reiniciar,
+      enfocarAlVolver,
+      tomarCampoAEnfocar,
     }),
     [
       eleccion,
@@ -59,6 +75,8 @@ export function InscripcionProvider({ children }) {
       elegirFecha,
       elegirTurno,
       reiniciar,
+      enfocarAlVolver,
+      tomarCampoAEnfocar,
     ],
   );
 

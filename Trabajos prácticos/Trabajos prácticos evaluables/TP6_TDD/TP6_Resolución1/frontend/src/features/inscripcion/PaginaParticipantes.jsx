@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import { ParticipanteForm } from '../../components/ParticipanteForm.jsx';
@@ -11,13 +12,19 @@ import { validarParticipantes } from './validarParticipantes.js';
 
 /** PT-04: cantidad de personas y datos de cada una. */
 export function PaginaParticipantes() {
-  const { actividad, turno, setParticipantesListos } = useInscripcion();
+  const { actividad, turno, setParticipantesListos, tomarCampoAEnfocar } = useInscripcion();
   const { register, watch, getValues, setError, clearErrors, setFocus, formState } =
     useFormContext();
   const navegar = useNavigate();
   const cupos = turno.cuposDisponibles;
   const cantidad = watch('cantidad');
   const visibles = Number.isInteger(cantidad) ? Math.min(Math.max(cantidad, 0), cupos) : 0;
+
+  // Si se volvió por un error de la API, el foco va al campo con el error.
+  useEffect(() => {
+    const campo = tomarCampoAEnfocar();
+    if (campo) setFocus(campo);
+  }, [tomarCampoAEnfocar, setFocus]);
 
   // Se muestran todos los errores a la vez y el foco va al primero, en el orden del formulario.
   function mostrarErrores(errores) {
