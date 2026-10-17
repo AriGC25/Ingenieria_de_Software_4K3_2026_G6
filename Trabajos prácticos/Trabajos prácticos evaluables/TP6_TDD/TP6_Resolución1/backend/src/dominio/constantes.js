@@ -31,3 +31,7 @@ export const EMAIL_MAX_CARACTERES = 254;
 export const FORMATO_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const INTENTOS_CODIGO = 3;
+
+export const PREFIJO_CODIGO = 'ECOPARK-';
+export const LARGO_CODIGO = 6;
+export const ALFABETO_CODIGO = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
