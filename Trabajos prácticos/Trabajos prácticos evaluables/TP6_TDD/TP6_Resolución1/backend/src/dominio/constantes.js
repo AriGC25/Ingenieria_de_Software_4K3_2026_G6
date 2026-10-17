@@ -31,3 +31,14 @@ export const EMAIL_MAX_CARACTERES = 254;
 export const FORMATO_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const INTENTOS_CODIGO = 3;
+
+export const PREFIJO_CODIGO = 'ECOPARK-';
+export const LARGO_CODIGO = 6;
+const CARACTERES_AMBIGUOS = '0O1I';
+export const ALFABETO_CODIGO = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789']
+  .filter((caracter) => !CARACTERES_AMBIGUOS.includes(caracter))
+  .join('');
+
+export const DURACION_ACTIVIDAD_MIN = 60;
+export const PRIMER_TURNO = '09:00';
+export const ULTIMO_TURNO = '17:00';

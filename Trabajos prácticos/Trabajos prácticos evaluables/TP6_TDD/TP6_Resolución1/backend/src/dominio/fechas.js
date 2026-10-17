@@ -47,3 +47,11 @@ export function horaArgentina(instante) {
 export function diaSiguiente(fecha) {
   return fechaArgentina(addDays(instanteArgentino(fecha, '12:00'), 1));
 }
+
+/**
+ * @param {Date} instante
+ * @returns {string} la fecha en hora argentina para mostrar, `dd/mm/aaaa` (S-23)
+ */
+export function fechaLegible(instante) {
+  return format(new TZDate(instante, ZONA_HORARIA), 'dd/MM/yyyy');
+}
