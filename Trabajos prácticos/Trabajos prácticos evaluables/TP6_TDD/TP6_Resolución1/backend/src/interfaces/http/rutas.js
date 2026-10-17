@@ -17,7 +17,7 @@ export function crearRutas(casosDeUso) {
       'get',
       '/actividades/:id/turnos',
       (req) => {
-        const { fecha } = validar(esquemaConsultaTurnos, req.query, 'fecha');
+        const { fecha } = validar(esquemaConsultaTurnos, req.query);
         return casosDeUso.consultarTurnos.ejecutar({ actividadId: req.params.id, fecha });
       },
     ],
@@ -45,8 +45,15 @@ function responder(controlador, estado) {
       .catch(next);
 }
 
-function validar(esquema, datos, campo) {
+function validar(esquema, datos) {
   const resultado = esquema.safeParse(datos);
-  if (!resultado.success) throw new SolicitudInvalida(campo);
+  if (!resultado.success) throw new SolicitudInvalida(campoDe(resultado.error.issues[0].path));
   return resultado.data;
+}
+
+/** `['participantes', 0, 'edad']` → `participantes[0].edad` */
+function campoDe(ruta) {
+  return ruta
+    .map((parte, i) => (typeof parte === 'number' ? `[${parte}]` : `${i ? '.' : ''}${parte}`))
+    .join('');
 }
