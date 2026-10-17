@@ -37,7 +37,10 @@ export function Modal({ abierto, titulo, onCerrar, children }) {
         <h2 id={idTitulo} className={styles.titulo}>
           {titulo}
         </h2>
-        <div className={styles.cuerpo}>{children}</div>
+        {/* El texto puede tener scroll: se enfoca para poder recorrerlo con el teclado. */}
+        <div className={styles.cuerpo} role="region" aria-labelledby={idTitulo} tabIndex={0}>
+          {children}
+        </div>
         <div className={styles.acciones}>
           <Button variante="secundario" onClick={onCerrar}>
             Cerrar
