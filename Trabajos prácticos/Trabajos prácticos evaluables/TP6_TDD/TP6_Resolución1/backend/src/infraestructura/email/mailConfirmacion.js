@@ -1,7 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { TZDate } from '@date-fns/tz';
-import { format } from 'date-fns';
-import { ZONA_HORARIA } from '../../dominio/constantes.js';
+import { fechaLegible, horaArgentina } from '../../dominio/fechas.js';
 import { escaparHtml, renderizar } from './renderizador.js';
 
 const PLANTILLA = readFileSync(
@@ -16,18 +14,17 @@ const PLANTILLA = readFileSync(
  * @returns {string}
  */
 export function filasParticipantes(participantes, requiereTalle) {
-  return participantes
-    .map((p) => {
-      const datos = [`DNI ${p.dni}`, `${p.edad} años`];
-      if (requiereTalle) datos.push(`Talle ${p.talle}`);
-      return (
-        '<tr><td style="padding:8px 0;border-bottom:1px solid #D9CDA9;">' +
-        `<strong>${escaparHtml(p.nombre)}</strong><br>` +
-        `<span style="color:#4A5A48;font-size:14px;">${escaparHtml(datos.join(' · '))}</span>` +
-        '</td></tr>'
-      );
-    })
-    .join('');
+  return participantes.map((p) => filaParticipante(p, requiereTalle)).join('');
+}
+
+function filaParticipante({ nombre, dni, edad, talle }, requiereTalle) {
+  const datos = [`DNI ${dni}`, `${edad} años`, ...(requiereTalle ? [`Talle ${talle}`] : [])];
+  return (
+    '<tr><td style="padding:8px 0;border-bottom:1px solid #D9CDA9;">' +
+    `<strong>${escaparHtml(nombre)}</strong><br>` +
+    `<span style="color:#4A5A48;font-size:14px;">${escaparHtml(datos.join(' · '))}</span>` +
+    '</td></tr>'
+  );
 }
 
 /**
@@ -36,9 +33,8 @@ export function filasParticipantes(participantes, requiereTalle) {
  * @returns {{ asunto: string, html: string }}
  */
 export function armarMailConfirmacion(inscripcion, appUrl) {
-  const local = new TZDate(inscripcion.inicio, ZONA_HORARIA);
-  const fecha = format(local, 'dd/MM/yyyy');
-  const hora = format(local, 'HH:mm');
+  const fecha = fechaLegible(inscripcion.inicio);
+  const hora = horaArgentina(inscripcion.inicio);
   const html = renderizar(
     PLANTILLA,
     {
