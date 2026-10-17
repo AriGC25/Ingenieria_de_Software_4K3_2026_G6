@@ -1,29 +1,34 @@
-import { NotificadorSmtp } from './notificadorSmtp.js';
+import { armarMensajeConfirmacion } from './mensajeConfirmacion.js';
 
 /**
- * Notificador del perfil `pruebas`: arma el mismo mensaje que el SMTP pero lo guarda en memoria,
- * para que las pruebas lo inspeccionen sin red.
+ * Notificador del perfil `pruebas`: arma el mismo mensaje que el SMTP y lo guarda en memoria, para
+ * inspeccionarlo sin red. Puede simular fallas del envío.
  */
-export class NotificadorEnMemoria extends NotificadorSmtp {
+export class NotificadorEnMemoria {
+  #opciones;
+  #fallasPendientes = 0;
+
   /** @param {{ remitente: string, appUrl: string, logo: Buffer }} opciones */
   constructor(opciones) {
-    const enviados = [];
-    let fallas = 0;
-    super({
-      ...opciones,
-      transporte: {
-        sendMail: async (mensaje) => {
-          if (fallas > 0) {
-            fallas -= 1;
-            throw new Error('Falla simulada del envío');
-          }
-          enviados.push(mensaje);
-        },
-      },
-    });
-    this.enviados = enviados;
-    this.fallarProximoEnvio = () => {
-      fallas += 1;
-    };
+    this.#opciones = opciones;
+    /** @type {object[]} */
+    this.enviados = [];
+  }
+
+  /** Hace fallar el próximo envío. */
+  fallarProximoEnvio() {
+    this.#fallasPendientes += 1;
+  }
+
+  /**
+   * @param {{ inscripcion: import('../../aplicacion/puertos.js').DetalleInscripcion, qr: Buffer }} datos
+   * @returns {Promise<void>}
+   */
+  async enviarConfirmacion(datos) {
+    if (this.#fallasPendientes > 0) {
+      this.#fallasPendientes -= 1;
+      throw new Error('Falla simulada del envío');
+    }
+    this.enviados.push(armarMensajeConfirmacion(datos, this.#opciones));
   }
 }
