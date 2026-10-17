@@ -55,3 +55,12 @@ export function diaSiguiente(fecha) {
 export function fechaLegible(instante) {
   return format(new TZDate(instante, ZONA_HORARIA), 'dd/MM/yyyy');
 }
+
+/**
+ * @param {unknown} texto
+ * @returns {boolean} si es una fecha de calendario real con la forma `YYYY-MM-DD`
+ */
+export function esFechaValida(texto) {
+  if (typeof texto !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(texto)) return false;
+  return fechaArgentina(instanteArgentino(texto, '12:00')) === texto;
+}
