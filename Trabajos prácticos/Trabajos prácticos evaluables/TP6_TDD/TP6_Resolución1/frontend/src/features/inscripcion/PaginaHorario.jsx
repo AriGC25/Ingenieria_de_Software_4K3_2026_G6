@@ -1,28 +1,26 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { listarFechas, listarTurnos } from '../../api/cliente.js';
-import { Button } from '../../components/Button.jsx';
 import { SelectorFecha } from '../../components/SelectorFecha.jsx';
 import { Stepper } from '../../components/Stepper.jsx';
 import { TurnoChip } from '../../components/TurnoChip.jsx';
 import { useCarga } from '../../hooks/useCarga.js';
+import { AccionesDelPaso } from './AccionesDelPaso.jsx';
 import { AvisoEnfocado } from './AvisoEnfocado.jsx';
 import { EleccionActual } from './EleccionActual.jsx';
 import { useInscripcion } from './InscripcionContexto.jsx';
 import styles from './Pasos.module.css';
+import { usePasoSiguiente } from './usePasoSiguiente.js';
 
 /** PT-03: elección de la fecha y el turno. Las fechas las define el backend (no calcula "hoy"). */
 export function PaginaHorario() {
   const { actividad, fecha, turno, elegirFecha, elegirTurno } = useInscripcion();
   const fechas = useCarga(listarFechas, []);
   const turnos = useCarga(fecha ? () => listarTurnos(actividad.id, fecha) : null, [fecha]);
-  const [faltaElegir, setFaltaElegir] = useState(0);
+  const { continuar, intentosFallidos } = usePasoSiguiente(
+    Boolean(turno),
+    '/inscripcion/participantes',
+  );
   const navegar = useNavigate();
-
-  function continuar() {
-    if (turno) navegar('/inscripcion/participantes');
-    else setFaltaElegir((veces) => veces + 1);
-  }
 
   const error = fechas.error ?? turnos.error;
   return (
@@ -59,15 +57,10 @@ export function PaginaHorario() {
           )}
         </section>
       )}
-      {faltaElegir > 0 && !turno && (
-        <AvisoEnfocado clave={faltaElegir}>Elegí un horario para continuar.</AvisoEnfocado>
+      {intentosFallidos > 0 && !turno && (
+        <AvisoEnfocado clave={intentosFallidos}>Elegí un horario para continuar.</AvisoEnfocado>
       )}
-      <div className={styles.acciones}>
-        <Button variante="secundario" onClick={() => navegar('/inscripcion/actividad')}>
-          Volver
-        </Button>
-        <Button onClick={continuar}>Continuar</Button>
-      </div>
+      <AccionesDelPaso onVolver={() => navegar('/inscripcion/actividad')} onContinuar={continuar} />
     </div>
   );
 }

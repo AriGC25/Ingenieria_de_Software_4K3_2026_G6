@@ -1,25 +1,21 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
 import { listarActividades } from '../../api/cliente.js';
 import { ActividadCard } from '../../components/ActividadCard.jsx';
-import { Button } from '../../components/Button.jsx';
 import { Stepper } from '../../components/Stepper.jsx';
 import { useCarga } from '../../hooks/useCarga.js';
+import { AccionesDelPaso } from './AccionesDelPaso.jsx';
 import { AvisoEnfocado } from './AvisoEnfocado.jsx';
 import { useInscripcion } from './InscripcionContexto.jsx';
 import styles from './Pasos.module.css';
+import { usePasoSiguiente } from './usePasoSiguiente.js';
 
 /** PT-02: elección de la actividad. */
 export function PaginaActividad() {
   const { actividad, elegirActividad } = useInscripcion();
   const { datos: actividades, cargando, error } = useCarga(listarActividades, []);
-  const [faltaElegir, setFaltaElegir] = useState(0);
-  const navegar = useNavigate();
-
-  function continuar() {
-    if (actividad) navegar('/inscripcion/horario');
-    else setFaltaElegir((veces) => veces + 1);
-  }
+  const { continuar, intentosFallidos } = usePasoSiguiente(
+    Boolean(actividad),
+    '/inscripcion/horario',
+  );
 
   return (
     <div className={styles.paso}>
@@ -39,13 +35,10 @@ export function PaginaActividad() {
           ))}
         </div>
       )}
-      {faltaElegir > 0 && !actividad && (
-        <AvisoEnfocado clave={faltaElegir}>Elegí una actividad para continuar.</AvisoEnfocado>
+      {intentosFallidos > 0 && !actividad && (
+        <AvisoEnfocado clave={intentosFallidos}>Elegí una actividad para continuar.</AvisoEnfocado>
       )}
-      <div className={styles.acciones}>
-        <span />
-        <Button onClick={continuar}>Continuar</Button>
-      </div>
+      <AccionesDelPaso onContinuar={continuar} />
     </div>
   );
 }
