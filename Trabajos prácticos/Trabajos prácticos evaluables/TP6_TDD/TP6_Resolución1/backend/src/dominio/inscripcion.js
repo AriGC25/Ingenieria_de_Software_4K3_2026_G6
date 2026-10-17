@@ -27,18 +27,11 @@ export function crearInscripcion({
   dnisYaInscriptos = [],
 }) {
   validarEmail(email);
-  if (turno.estado(ahora, calendario).estado === 'no_disponible') throw new HorarioNoDisponible();
-  if (participantes.length === 0) throw new DatosParticipanteInvalidos('participantes');
-  if (participantes.length > turno.cuposDisponibles()) throw new SinCupo();
-
-  const validados = [];
-  participantes.forEach((datos, indice) => {
-    const dnisPrevios = validados.map((p) => p.dni);
-    validados.push(turno.actividad.prepararParticipante(datos, { indice, dnisPrevios }));
-  });
-
+  validarTurno(turno, ahora, calendario);
+  validarCantidad(participantes.length, turno);
+  const validados = validarParticipantes(participantes, turno.actividad);
   if (aceptaTerminos !== true) throw new TerminosNoAceptados();
-  if (validados.some((p) => dnisYaInscriptos.includes(p.dni))) throw new InscripcionSuperpuesta();
+  validarSuperposicion(validados, dnisYaInscriptos);
 
   turno.reservar(validados.length);
   return Object.freeze({ turno, email, participantes: validados, terminosAceptadosEn: ahora });
@@ -48,4 +41,26 @@ function validarEmail(email) {
   const valido =
     typeof email === 'string' && email.length <= EMAIL_MAX_CARACTERES && FORMATO_EMAIL.test(email);
   if (!valido) throw new SolicitudInvalida('email');
+}
+
+function validarTurno(turno, ahora, calendario) {
+  if (turno.estado(ahora, calendario).estado === 'no_disponible') throw new HorarioNoDisponible();
+}
+
+function validarCantidad(cantidad, turno) {
+  if (cantidad === 0) throw new DatosParticipanteInvalidos('participantes');
+  if (cantidad > turno.cuposDisponibles()) throw new SinCupo();
+}
+
+function validarParticipantes(participantes, actividad) {
+  return participantes.reduce((validados, datos, indice) => {
+    const dnisPrevios = validados.map((p) => p.dni);
+    return [...validados, actividad.prepararParticipante(datos, { indice, dnisPrevios })];
+  }, []);
+}
+
+function validarSuperposicion(participantes, dnisYaInscriptos) {
+  if (participantes.some((p) => dnisYaInscriptos.includes(p.dni))) {
+    throw new InscripcionSuperpuesta();
+  }
 }
