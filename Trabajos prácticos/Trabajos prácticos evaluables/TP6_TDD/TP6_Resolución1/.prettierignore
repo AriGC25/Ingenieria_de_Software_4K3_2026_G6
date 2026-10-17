@@ -1,0 +1,8 @@
+node_modules
+dist
+coverage
+generated
+docs
+database/migraciones
+package-lock.json
+*.md
