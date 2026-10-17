@@ -1,0 +1,9 @@
+.pagina {
+  display: flex;
+  flex-direction: column;
+  gap: var(--esp-6);
+}
+
+.bajada {
+  color: var(--color-texto-secundario);
+}

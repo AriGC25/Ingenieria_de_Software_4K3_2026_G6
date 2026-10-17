@@ -1,0 +1,5 @@
+.contenido {
+  max-width: var(--ancho-contenido);
+  margin: 0 auto;
+  padding: var(--esp-6) var(--esp-4) var(--esp-12);
+}
