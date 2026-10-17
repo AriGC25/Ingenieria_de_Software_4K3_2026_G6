@@ -1,0 +1,23 @@
+name: TP6 - CI
+
+on:
+  push:
+    paths: ['Trabajos prácticos/Trabajos prácticos evaluables/TP6_TDD/TP6_Resolución1/**']
+  pull_request:
+    paths: ['Trabajos prácticos/Trabajos prácticos evaluables/TP6_TDD/TP6_Resolución1/**']
+
+defaults:
+  run:
+    working-directory: 'Trabajos prácticos/Trabajos prácticos evaluables/TP6_TDD/TP6_Resolución1'
+
+jobs:
+  calidad:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
