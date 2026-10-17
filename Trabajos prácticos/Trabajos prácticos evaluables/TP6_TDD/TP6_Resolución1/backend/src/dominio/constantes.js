@@ -16,3 +16,6 @@ export const CALENDARIO_POR_DEFECTO = Object.freeze({
   diasCerrados: [1],
   feriadosCerrados: ['12-25', '01-01'],
 });
+
+export const VENTANA_APERTURA_HORAS = 24;
+export const CIERRE_INSCRIPCION_MIN = 15;
