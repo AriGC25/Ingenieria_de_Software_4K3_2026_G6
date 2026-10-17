@@ -1,7 +1,6 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-import { crearInscripcion } from '../../api/cliente.js';
 import { Button } from '../../components/Button.jsx';
 import { Checkbox } from '../../components/Checkbox.jsx';
 import { Modal } from '../../components/Modal.jsx';
@@ -12,60 +11,20 @@ import { AccionesDelPaso } from './AccionesDelPaso.jsx';
 import { AvisoEnfocado } from './AvisoEnfocado.jsx';
 import { useInscripcion } from './InscripcionContexto.jsx';
 import styles from './Pasos.module.css';
-import { armarSolicitud, ubicarCampo } from './solicitud.js';
+import { useEnvioInscripcion } from './useEnvioInscripcion.js';
 
 const ELEGIR_OTRO_HORARIO = ['SIN_CUPO', 'HORARIO_NO_DISPONIBLE'];
 
 /** PT-05: resumen, aceptación de los términos (con el modal PT-07) y envío. */
 export function PaginaConfirmacion() {
   const { email } = useSesion();
-  const inscripcion = useInscripcion();
-  const { actividad, fecha, turno, setResultado, enfocarAlVolver } = inscripcion;
-  const { register, watch, getValues, setError, formState } = useFormContext();
+  const { actividad, fecha, turno } = useInscripcion();
+  const { register, watch, getValues, formState } = useFormContext();
+  const { confirmar, enviando, errorGeneral } = useEnvioInscripcion();
   const [terminosAbiertos, setTerminosAbiertos] = useState(false);
-  const [enviando, setEnviando] = useState(false);
-  const [errorGeneral, setErrorGeneral] = useState(null);
-  const enCurso = useRef(false);
   const navegar = useNavigate();
 
-  const valores = getValues();
-  const participantes = valores.participantes.slice(0, valores.cantidad);
-  const aceptaTerminos = watch('aceptaTerminos');
-
-  async function confirmar() {
-    if (enCurso.current) return;
-    enCurso.current = true;
-    setEnviando(true);
-    setErrorGeneral(null);
-    try {
-      const confirmada = await crearInscripcion(
-        armarSolicitud(getValues(), { turno, actividad, email }),
-      );
-      setResultado({ tipo: 'exito', inscripcion: confirmada });
-      navegar('/inscripcion/resultado');
-    } catch (error) {
-      manejarError(error);
-    } finally {
-      enCurso.current = false;
-      setEnviando(false);
-    }
-  }
-
-  function manejarError(error) {
-    if (error.codigo === 'ENVIO_CONFIRMACION_FALLIDO') {
-      setResultado({ tipo: 'envio_fallido', mensaje: error.mensaje });
-      navegar('/inscripcion/resultado');
-      return;
-    }
-    const ubicacion = error.campo && ubicarCampo(error.campo);
-    if (!ubicacion) {
-      setErrorGeneral(error);
-      return;
-    }
-    setError(ubicacion.campo, { type: 'api', message: error.mensaje });
-    enfocarAlVolver(ubicacion.campo);
-    navegar(ubicacion.ruta);
-  }
+  const { participantes, cantidad } = getValues();
 
   return (
     <div className={styles.paso}>
@@ -77,7 +36,7 @@ export function PaginaConfirmacion() {
         hora={turno.hora}
         email={email}
         requiereTalle={actividad.requiereTalle}
-        participantes={participantes}
+        participantes={participantes.slice(0, cantidad)}
       />
       <Checkbox
         id="aceptaTerminos"
@@ -119,7 +78,7 @@ export function PaginaConfirmacion() {
         onContinuar={confirmar}
         textoContinuar="Confirmar inscripción"
         cargando={enviando}
-        deshabilitado={!aceptaTerminos}
+        deshabilitado={!watch('aceptaTerminos')}
       />
     </div>
   );
