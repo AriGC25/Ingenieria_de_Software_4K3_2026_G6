@@ -1,0 +1,52 @@
+:root {
+  /* Color: paleta del PO (coolors 386641-6a994e-a7c957-f2e8cf-bc4749) y derivados */
+  --color-primario: #386641;
+  --color-primario-hover: #2a4d31;
+  --color-secundario: #6a994e;
+  --color-acento: #a7c957;
+  --color-fondo: #f2e8cf;
+  --color-superficie: #ffffff;
+  --color-borde: #d9cda9;
+  --color-texto: #1f2a1f;
+  --color-texto-secundario: #4a5a48;
+  --color-exito: #386641;
+  --color-error: #bc4749;
+  --color-advertencia: #9a5b00;
+  --color-deshabilitado: #b5ae98;
+
+  /* Color por actividad */
+  --color-tirolesa: #6a1b9a;
+  --color-safari: #8d6e63;
+  --color-palestra: #d84315;
+  --color-jardineria: #558b2f;
+
+  /* Tipografía */
+  --fuente: 'Lato', system-ui, sans-serif;
+  --texto-h1: 700 28px / 1.25 var(--fuente);
+  --texto-h2: 700 22px / 1.3 var(--fuente);
+  --texto-h3: 600 18px / 1.35 var(--fuente);
+  --texto-cuerpo: 400 16px / 1.5 var(--fuente);
+  --texto-chico: 400 14px / 1.45 var(--fuente);
+  --texto-etiqueta: 600 14px / 1.45 var(--fuente);
+
+  /* Espaciado (múltiplos de 4) */
+  --esp-1: 4px;
+  --esp-2: 8px;
+  --esp-3: 12px;
+  --esp-4: 16px;
+  --esp-6: 24px;
+  --esp-8: 32px;
+  --esp-12: 48px;
+
+  /* Bordes y sombras */
+  --radio-chico: 6px;
+  --radio-medio: 12px;
+  --radio-total: 999px;
+  --sombra-1: 0 1px 3px rgb(0 0 0 / 0.08);
+  --sombra-2: 0 4px 12px rgb(0 0 0 / 0.12);
+
+  /* Layout y movimiento */
+  --ancho-contenido: 640px;
+  --area-tactil: 44px;
+  --transicion: 150ms ease-out;
+}
