@@ -20,23 +20,27 @@ export class ListarActividades {
    */
   async ejecutar() {
     const ahora = this.reloj.ahora();
-    const [actividades, candidatos] = await Promise.all([
+    const [actividades, disponibles] = await Promise.all([
       this.repositorioActividades.listar(),
-      this.repositorioTurnos.listarDisponiblesEntre(ahora, addHours(ahora, VENTANA_APERTURA_HORAS)),
+      this.#actividadesConTurnoDisponible(ahora),
     ]);
-    const conTurno = new Set(
-      candidatos
-        .filter((turno) => turno.estado(ahora, this.calendario).estado === 'disponible')
-        .map((turno) => turno.actividad.id),
-    );
-    return actividades.map((a) => ({
-      id: a.id,
-      nombre: a.nombre,
-      requiereTalle: a.requiereTalle,
-      edadMinima: a.edadMinima,
-      cupoPorTurno: a.cupoPorTurno,
-      terminos: a.terminos,
-      disponible: conTurno.has(a.id),
+    return actividades.map(({ id, nombre, requiereTalle, edadMinima, cupoPorTurno, terminos }) => ({
+      id,
+      nombre,
+      requiereTalle,
+      edadMinima,
+      cupoPorTurno,
+      terminos,
+      disponible: disponibles.has(id),
     }));
+  }
+
+  async #actividadesConTurnoDisponible(ahora) {
+    const hasta = addHours(ahora, VENTANA_APERTURA_HORAS);
+    const candidatos = await this.repositorioTurnos.listarDisponiblesEntre(ahora, hasta);
+    const disponibles = candidatos.filter(
+      (turno) => turno.estado(ahora, this.calendario).estado === 'disponible',
+    );
+    return new Set(disponibles.map((turno) => turno.actividad.id));
   }
 }
