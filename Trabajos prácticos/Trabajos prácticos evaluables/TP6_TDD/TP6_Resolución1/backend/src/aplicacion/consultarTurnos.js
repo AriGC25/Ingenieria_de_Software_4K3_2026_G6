@@ -28,16 +28,7 @@ export class ConsultarTurnos {
 
     const ahora = this.reloj.ahora();
     const turnos = await this.repositorioTurnos.listarPorActividadYFecha(actividadId, fecha);
-    return {
-      ...estadoFecha,
-      turnos: turnos
-        .sort((a, b) => a.inicio - b.inicio)
-        .map((turno) => ({
-          id: turno.id,
-          hora: turno.hora,
-          cuposDisponibles: turno.cuposDisponibles(),
-          ...turno.estado(ahora, this.calendario),
-        })),
-    };
+    const ordenados = [...turnos].sort((a, b) => a.inicio - b.inicio);
+    return { ...estadoFecha, turnos: ordenados.map((t) => t.resumen(ahora, this.calendario)) };
   }
 }
