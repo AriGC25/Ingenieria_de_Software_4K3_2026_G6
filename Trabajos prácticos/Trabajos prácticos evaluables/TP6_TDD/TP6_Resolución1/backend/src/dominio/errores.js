@@ -17,6 +17,8 @@ export const MENSAJES = Object.freeze({
   TERMINOS_NO_ACEPTADOS: 'Para continuar, aceptá los términos y condiciones.',
   INSCRIPCION_SUPERPUESTA: 'Una de las personas ya está inscripta en este horario. Elegí otro.',
   SOLICITUD_INVALIDA: 'Algo salió mal. Intentá de nuevo en unos minutos.',
+  ENVIO_CONFIRMACION_FALLIDO:
+    'No pudimos enviarte la confirmación y tu inscripción no se registró. Intentá de nuevo.',
 });
 
 /** Error de una regla de negocio. Lleva un `codigo` estable y, si es de un dato, su `campo`. */
@@ -111,5 +113,12 @@ export class SolicitudInvalida extends ErrorDominio {
 export class ActividadInexistente extends ErrorDominio {
   constructor() {
     super('ACTIVIDAD_INEXISTENTE', MENSAJES.SOLICITUD_INVALIDA);
+  }
+}
+
+/** No se pudo enviar el mail de confirmación: la inscripción se deshizo (RF-19). */
+export class EnvioConfirmacionFallido extends ErrorDominio {
+  constructor() {
+    super('ENVIO_CONFIRMACION_FALLIDO', MENSAJES.ENVIO_CONFIRMACION_FALLIDO);
   }
 }

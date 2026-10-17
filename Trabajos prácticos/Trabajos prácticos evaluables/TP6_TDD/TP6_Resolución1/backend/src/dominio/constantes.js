@@ -29,3 +29,5 @@ export const NOMBRE_MAX_CARACTERES = 100;
 
 export const EMAIL_MAX_CARACTERES = 254;
 export const FORMATO_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export const INTENTOS_CODIGO = 3;

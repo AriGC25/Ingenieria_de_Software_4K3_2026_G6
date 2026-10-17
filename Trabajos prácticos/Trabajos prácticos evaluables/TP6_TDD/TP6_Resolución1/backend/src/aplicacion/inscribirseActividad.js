@@ -1,5 +1,7 @@
-import { HorarioNoDisponible } from '../dominio/errores.js';
+import { INTENTOS_CODIGO } from '../dominio/constantes.js';
+import { EnvioConfirmacionFallido, HorarioNoDisponible } from '../dominio/errores.js';
 import { crearInscripcion } from '../dominio/inscripcion.js';
+import { CodigoDuplicado } from './puertos.js';
 
 /** Inscribe a un grupo en un turno y le envía la confirmación por mail. */
 export class InscribirseActividad {
@@ -25,9 +27,14 @@ export class InscribirseActividad {
     if (!turno) throw new HorarioNoDisponible();
 
     const inscripcion = await this.#validar(turno, solicitud);
-    const codigo = await this.#registrar(inscripcion);
+    const { codigo, id } = await this.#registrar(inscripcion);
     const detalle = detalleDe(codigo, inscripcion);
-    await this.#notificar(detalle);
+    try {
+      await this.#notificar(detalle);
+    } catch {
+      await this.repositorioInscripciones.anular(id);
+      throw new EnvioConfirmacionFallido();
+    }
 
     return respuestaDe(detalle);
   }
@@ -49,15 +56,22 @@ export class InscribirseActividad {
   }
 
   async #registrar(inscripcion) {
-    const codigo = this.generadorCodigo.generar();
-    await this.repositorioInscripciones.registrarConReserva({
-      codigo,
-      turnoId: inscripcion.turno.id,
-      email: inscripcion.email,
-      terminosAceptadosEn: inscripcion.terminosAceptadosEn,
-      participantes: inscripcion.participantes,
-    });
-    return codigo;
+    for (let intento = 0; intento < INTENTOS_CODIGO; intento++) {
+      const codigo = this.generadorCodigo.generar();
+      try {
+        const { id } = await this.repositorioInscripciones.registrarConReserva({
+          codigo,
+          turnoId: inscripcion.turno.id,
+          email: inscripcion.email,
+          terminosAceptadosEn: inscripcion.terminosAceptadosEn,
+          participantes: inscripcion.participantes,
+        });
+        return { codigo, id };
+      } catch (error) {
+        if (!(error instanceof CodigoDuplicado)) throw error;
+      }
+    }
+    throw new Error('No se pudo generar un código de inscripción único');
   }
 
   async #notificar(detalle) {
