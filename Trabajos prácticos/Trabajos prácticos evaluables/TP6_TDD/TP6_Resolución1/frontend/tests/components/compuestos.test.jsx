@@ -66,6 +66,16 @@ describe('Modal', () => {
     expect(dialogo).toContainElement(document.activeElement);
   });
 
+  it('CMP-10: el contenido con scroll se puede enfocar y leer con el teclado', async () => {
+    render(<ConModal />);
+    await userEvent.click(screen.getByRole('button', { name: 'términos y condiciones' }));
+
+    const contenido = screen.getByRole('region', { name: 'Términos de Tirolesa' });
+
+    expect(contenido).toHaveAttribute('tabindex', '0');
+    expect(contenido).toHaveTextContent('Texto completo.');
+  });
+
   it('CMP-10: se cierra con Esc y devuelve el foco al elemento que lo abrió', async () => {
     render(<ConModal />);
     const enlace = screen.getByRole('button', { name: 'términos y condiciones' });
