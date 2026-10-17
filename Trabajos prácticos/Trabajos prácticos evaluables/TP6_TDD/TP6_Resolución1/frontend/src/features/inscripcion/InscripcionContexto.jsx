@@ -17,6 +17,7 @@ export function InscripcionProvider({ children }) {
   const [resultado, setResultado] = useState(null);
 
   const elegirActividad = useCallback((actividad) => {
+    setParticipantesListos(false);
     setEleccion((actual) =>
       actual.actividad?.id === actividad.id ? actual : { actividad, fecha: null, turno: null },
     );
@@ -26,7 +27,10 @@ export function InscripcionProvider({ children }) {
     setEleccion((actual) => (actual.fecha === fecha ? actual : { ...actual, fecha, turno: null }));
   }, []);
 
-  const elegirTurno = useCallback((turno) => setEleccion((actual) => ({ ...actual, turno })), []);
+  const elegirTurno = useCallback((turno) => {
+    setParticipantesListos(false);
+    setEleccion((actual) => ({ ...actual, turno }));
+  }, []);
 
   const reiniciar = useCallback(() => {
     formulario.reset(VALORES_INICIALES);

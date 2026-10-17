@@ -2,7 +2,9 @@ import { Navigate, Outlet, Route, Routes } from 'react-router';
 import { Layout } from './components/Layout.jsx';
 import { InscripcionProvider } from './features/inscripcion/InscripcionContexto.jsx';
 import { PaginaActividad } from './features/inscripcion/PaginaActividad.jsx';
+import { PaginaConfirmacion } from './features/inscripcion/PaginaConfirmacion.jsx';
 import { PaginaHorario } from './features/inscripcion/PaginaHorario.jsx';
+import { PaginaParticipantes } from './features/inscripcion/PaginaParticipantes.jsx';
 import { PasoPendiente } from './features/inscripcion/PasoPendiente.jsx';
 import { PaginaIngreso } from './features/sesion/PaginaIngreso.jsx';
 import { RutaProtegida } from './features/sesion/RutaProtegida.jsx';
@@ -12,6 +14,8 @@ import { PaginaValidacion } from './features/validacion/PaginaValidacion.jsx';
 const PASOS = [
   { ruta: 'actividad', paso: 1, Pagina: PaginaActividad },
   { ruta: 'horario', paso: 2, Pagina: PaginaHorario },
+  { ruta: 'participantes', paso: 3, Pagina: PaginaParticipantes },
+  { ruta: 'confirmacion', paso: 4, Pagina: PaginaConfirmacion },
 ];
 
 /** La aplicación con sus proveedores y rutas. El router lo pone quien la monta. */
