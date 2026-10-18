@@ -149,7 +149,7 @@ Se avanza de adentro hacia afuera (dominio, aplicación, API y frontend). La met
 
 ## Despliegue
 
-La demo se despliega en Vercel (frontend y API), con Turso como base y Gmail para el correo. `vercel.json`, `.vercelignore` y `api/index.js` ya están listos; los pasos (migraciones y seed contra Turso, variables y prueba) están en el [procedimiento de despliegue](docs/06-despliegue/03-procedimiento.md).
+La demo está publicada en <https://ecoharmony-park-eight.vercel.app>: Vercel (frontend y API), Turso como base y Gmail para el correo ([despliegue realizado](docs/06-despliegue/05-despliegue-realizado.md)). `vercel.json`, `.vercelignore` y `api/index.js` ya están listos; los pasos (migraciones y seed contra Turso, variables y prueba) están en el [procedimiento de despliegue](docs/06-despliegue/03-procedimiento.md).
 
 ## API
 

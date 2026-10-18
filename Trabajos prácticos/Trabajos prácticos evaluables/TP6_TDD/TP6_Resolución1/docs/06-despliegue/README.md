@@ -10,6 +10,7 @@ Cómo se despliega el sistema para la demo con los PO, qué se validó antes de 
 | [02-configuracion-de-la-demo.md](02-configuracion-de-la-demo.md) | Variables de entorno, reloj fijo y datos de la demo |
 | [03-procedimiento.md](03-procedimiento.md) | Pasos detallados: Gmail, Turso, migraciones, seed, Vercel y prueba |
 | [04-riesgos-y-limpieza.md](04-riesgos-y-limpieza.md) | Pendientes por validar, plan B, seguridad y limpieza |
+| [05-despliegue-realizado.md](05-despliegue-realizado.md) | URL pública, verificación, hallazgos y cómo fijar el reloj el día de la demo |
 
 ## Resumen
 
@@ -19,3 +20,5 @@ Cómo se despliega el sistema para la demo con los PO, qué se validó antes de 
 | Base de datos | **Turso** (libSQL), plan gratuito |
 | Correo | **Gmail SMTP** con contraseña de aplicación |
 | Plan B | Notebook con túnel de Cloudflare |
+
+La demo está publicada en <https://ecoharmony-park-eight.vercel.app> ([despliegue realizado](05-despliegue-realizado.md)).

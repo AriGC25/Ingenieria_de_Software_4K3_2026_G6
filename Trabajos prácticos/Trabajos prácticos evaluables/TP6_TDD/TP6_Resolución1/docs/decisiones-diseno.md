@@ -102,6 +102,6 @@ Surgieron durante la construcción y no estaban definidas en el diseño.
 
 ## 6. Pendientes
 
-- **Despliegue de la demo en Vercel y Turso (fase 9):** la configuración está lista (`vercel.json`, `.vercelignore`, `api/index.js` y los scripts de migración y seed para Turso). Falta ejecutar el [procedimiento](06-despliegue/03-procedimiento.md) con las credenciales del equipo y la prueba completa desde un celular.
+- **Prueba desde un celular:** la demo está publicada en <https://ecoharmony-park-eight.vercel.app> y verificada ([despliegue realizado](06-despliegue/05-despliegue-realizado.md)); falta escanear el QR del mail desde un celular con datos móviles.
 - **Validación del PO:** los textos de los términos (`backend/src/infraestructura/database/datosMaestros.js`) y el logo (`frontend/src/assets/`) se envían al PO (RNF-03 y RNF-04).
 - **Revisión de código por otro integrante** (Definición de Done).
